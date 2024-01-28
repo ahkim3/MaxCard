@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   Jost_500Medium,
@@ -10,21 +9,21 @@ import {
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-// export default function App() {
-const App = () => {
+export default function App() {
   let [fontsLoaded] = useFonts({Jost_500Medium,});
   if(!fontsLoaded) {
-    return <SplashScreen />;
+    return;
   } else {
     return (
       <View style={styles.container}>
         <LinearGradient
           colors={['#2C506F', 'black']}
-          style={styles.background}
-        >
+          style={styles.background}>
+          <LinearGradient
+            colors={['#D6F3D5', 'rgba(214, 243, 213, 0)']}
+            style={styles.circle} />
           <Text style={styles.text}>Loading...</Text>
         </LinearGradient>
-
       </View>
     );
   }
@@ -45,13 +44,20 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Jost_500Medium',
     fontSize: 24,
-    /* identical to box height */
     letterSpacing: 4,
     color: 'white',
-  }
+  },
+
+  /* Loading Page */
+
+  circle: {
+    width: 283,
+    height: 283,
+    borderRadius: 283/2,
+    bottom: 50,
+  },
 
 });
-export default App;
 
 //     /* Loading Page - 1 */
 
