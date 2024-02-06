@@ -1,6 +1,12 @@
 import boto3
 from decimal import Decimal
 
+# List of functions:
+# get_cards()
+# get_card_id_from_name(card_name)
+# get_users()
+# get_user_cards(user_id)
+
 class Card:
     def __init__(self, card_name, card_categories, card_base, card_company, card_id, card_specials):
         self.card_name = card_name
@@ -57,6 +63,19 @@ def scan_dynamodb_table(table_name):
 def get_cards():
     cards = scan_dynamodb_table('cards')
     sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
+        # formatting card_categories and card_specials into dictionaries
+    for card in sorted_cards:
+        card_categories_dict = {}
+        for category_item in card['card_categories']:
+            inner_key, inner_value = category_item.popitem()
+            card_categories_dict[inner_key] = int(inner_value) 
+        card['card_categories'] = card_categories_dict
+        card_specials_dict = {}
+        for special_item in card['card_specials']:
+            inner_key, inner_value = special_item.popitem()
+            card_specials_dict[inner_key] = int(inner_value)
+        card['card_specials'] = card_specials_dict
+
     card_objects = [Card(**item) for item in sorted_cards]
     return card_objects
 
@@ -112,26 +131,57 @@ def get_user_cards(user_id):
 
         card_ids = user_item.get('user_cards', [])
 
-        cards_table_name = 'cards'
-        cards_table = dynamodb.Table(cards_table_name)
+        # Get card objects using get_cards function
+        all_cards = get_cards()
 
-        cards_details = []
-        for card_id in card_ids:
-            response = cards_table.get_item(Key={'card_id': card_id})
-            card_item = response.get('Item')
+        # Filter card objects based on user's card_ids
+        user_cards = [card for card in all_cards if card.card_id in card_ids]
 
-            if card_item:
-                cards_details.append(card_item)
-
-        return cards_details
+        return user_cards
 
     except Exception as e:
         print(f"Error retrieving user cards: {str(e)}")
         return None
 
+# takes the coordinates and returns the nearest locations
+def nearest_locations(coordinates):    
+    return []
+
+# pseudocode
+# takes the coordinates, returns a map of the best cards
+def get_best_cards(user_id, coordinates):
+    # get nearest locations
+    nearest_locations = nearest_locations(coordinates)
+    # get user cards
+    user_cards = get_user_cards(user_id)
+    best_cards = {}
+    # for each location, find the best card for that location and append it to best_cards
+    for location in nearest_locations:
+        # keep track of the best card's id and its rate
+        best_rate = 0
+        best_card = 0
+        for card in user_cards:
+            # check for specials
+            if (location.name in card.card_specials):
+                if(card.card_specials[location.name] > best_rate):
+                    best_rate = card.card_specials[location.name]
+                    best_card = card.card_id
+            # check for category rate
+            if (location.category in card.card_categories):
+                if(card.card_categories[location.category] > best_rate):
+                    best_rate = card.card_categories[location.category]
+                    best_card = card.card_id
+            # check for base rate
+            if (card.card_base_value > best_rate):
+                best_rate = card.card_base_value
+                best_card = card.card_id
+        # store the best card
+        best_cards[location.name] = best_card   
+    return best_cards
+
 ## Examples ----------------------
 
-## get_cards() example
+# # get_cards() example
 # all_items = get_cards()
 # for card in all_items:
 #     print(card)
@@ -149,6 +199,8 @@ def get_user_cards(user_id):
 # for user in all_items:
 #     print(user)
 
-# # Example usage for get_user_cards:
+# # get_user_cards() example:
 # user_id_to_query = 0 
 # user_cards_details = get_user_cards(user_id_to_query)
+# print(user_cards_details)
+# print(user_cards_details[0].card_categories)

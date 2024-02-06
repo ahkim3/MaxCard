@@ -1,6 +1,14 @@
 import boto3
 from decimal import Decimal
 
+# List of functions:
+# create_card(card_base, card_categories, card_company, card_name, card_specials)
+# delete_card(primary_key_value)
+# create_user(user_cards, user_name)
+# delete_user(primary_key_value)
+# add_card_to_user(user_id, card_id)
+# delete_card_from_user(user_id, card_id)
+
 def delete_dynamodb_item(table_name, primary_key_value):
     """
     Delete an item from a DynamoDB table based on its primary key.
