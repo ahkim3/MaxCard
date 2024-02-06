@@ -30,6 +30,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "17335db6-1efc-48ea-81b1-f6721548e477"
+      }
+    },
+    "owner": "maxcard"
   }
 }
