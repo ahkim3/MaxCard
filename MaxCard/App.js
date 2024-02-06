@@ -1,4 +1,4 @@
-import { LoadingScreen } from './LoadingScreen';
+import { LoadingScreen } from './views/LoadingScreen';
 
 export default function App() {
   return (
