@@ -1,3 +1,3 @@
 yum update
-yum install python3
-yum install python3-pip
+yum install python36
+yum install python36-pip
