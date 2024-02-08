@@ -14,6 +14,7 @@ screen -d -m python3 ./app.py
 if [ $? -eq 0 ]
 then
   echo "--server running server--"
+  exit 0
 else
   echo "Error encountered while starting the server. Check output.log for details."
   exit 1
