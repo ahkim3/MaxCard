@@ -8,7 +8,7 @@ echo "--Installing Requirements--"
 python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
-python3 ./app.py & disown
+nohup python3 ./app.py > output.log 2>&1 &
 
 sleep 10
 echo "--server running server--"
