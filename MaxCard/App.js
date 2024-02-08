@@ -1,7 +1,17 @@
-import { LoadingScreen } from './LoadingScreen';
+import { StyleSheet, View} from "react-native";
+import Home  from './Home';
+
 
 export default function App() {
   return (
-    <LoadingScreen />
-  )
+    <View style={styles.container}>
+      <Home/>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
