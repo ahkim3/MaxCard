@@ -1,8 +1,17 @@
-import { LoadingScreen } from './views/LoadingScreen';
+import { StyleSheet, View} from "react-native";
+import Home  from './Home';
+
 
 export default function App() {
   return (
-    <LoadingScreen />
-    // <LocationScreen/ > which returns a view after getlocationcards returns
-  )
+    <View style={styles.container}>
+      <Home/>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
