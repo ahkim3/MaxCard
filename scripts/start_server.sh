@@ -8,8 +8,7 @@ echo "--Installing Requirements--"
 python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
-chmod +x ./app.py
-nohup python3 ./app.py &
+screen -L -Logfile ./output.log ./app.py &
 
 if [ $? -eq 0 ]
 then
