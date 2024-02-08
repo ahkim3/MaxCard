@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # File with all the flask logic
 
 from flask import Flask, jsonify, request
