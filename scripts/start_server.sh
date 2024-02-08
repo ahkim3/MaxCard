@@ -8,6 +8,7 @@ echo "--Installing Requirements--"
 python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
+script /dev/null
 screen python3 ./app.py
 
 if [ $? -eq 0 ]
