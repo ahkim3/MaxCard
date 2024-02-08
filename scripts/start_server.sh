@@ -8,7 +8,7 @@ echo "--Installing Requirements--"
 python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
-nohup python3 ./app.py > output.log 2>&1 &
+nohup python3 ./app.py &
 
 if [ $? -eq 0 ]
 then
