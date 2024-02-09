@@ -7,6 +7,8 @@ from decimal import Decimal
 # get_users()
 # get_user_cards(user_id)
 
+REGION_NAME = 'us-east-1'
+
 class Card:
     def __init__(self, card_name, card_categories, card_base, card_company, card_id, card_specials):
         self.card_name = card_name
@@ -38,7 +40,7 @@ def scan_dynamodb_table(table_name):
     Returns:
     - list: List of items in the DynamoDB table.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     table = dynamodb.Table(table_name)
 
     try:
@@ -82,7 +84,7 @@ def get_cards():
 # Takes a card name and returns the corresponding id if it exists
 def get_card_id_from_name(card_name):
     table_name = 'cards'
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     table = dynamodb.Table(table_name)
 
     try:
@@ -118,7 +120,7 @@ def get_users():
 # returns the list of cards owned by a user
 def get_user_cards(user_id):
     users_table_name = 'users'
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     users_table = dynamodb.Table(users_table_name)
 
     try:
