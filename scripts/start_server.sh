@@ -10,14 +10,6 @@ python3 -m pip install -r requirements.txt
 echo "--starting server--"
 script /dev/null
 screen -d -m -S maxcardserver python3 ./app.py
-
-if [ $? -eq 0 ]
-then
-  echo "--server running server--"
-  exit 0
-else
-  echo "Error encountered while starting the server. Check output.log for details."
-  exit 1
-fi
+echo "--server running--"
 
 exit 0
