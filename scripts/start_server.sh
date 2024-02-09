@@ -8,14 +8,8 @@ echo "--Installing Requirements--"
 python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
-nohup python3 ./app.py > output.log 2>&1 &
-
-if [ $? -eq 0 ]
-then
-  echo "--server running server--"
-else
-  echo "Error encountered while starting the server. Check output.log for details."
-  exit 1
-fi
+script /dev/null
+screen -d -m -S maxcardserver python3 ./app.py
+echo "--server running--"
 
 exit 0
