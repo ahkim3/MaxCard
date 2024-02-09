@@ -11,5 +11,7 @@ else
     echo "Flask server is not running."
 fi
 
+screen -X -S maxcardserver kill
+
 # Exit with a successful status code
 exit 0

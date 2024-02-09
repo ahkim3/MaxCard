@@ -9,7 +9,7 @@ python3 -m pip install -r requirements.txt
 
 echo "--starting server--"
 script /dev/null
-screen -d -m python3 ./app.py
+screen -d -m -S maxcardserver python3 ./app.py
 
 if [ $? -eq 0 ]
 then
