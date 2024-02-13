@@ -10,13 +10,23 @@ from decimal import Decimal
 REGION_NAME = 'us-east-1'
 
 class Card:
-    def __init__(self, card_name, card_categories, card_base, card_company, card_id, card_specials):
-        self.card_name = card_name
-        self.card_categories = card_categories
-        self.card_base = card_base
-        self.card_company = card_company
-        self.card_id = card_id
-        self.card_specials = card_specials
+    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_id:int, card_specials:dict):
+        self.card_name      = card_name
+        self.card_categories= card_categories
+        self.card_base      = card_base
+        self.card_company   = card_company
+        self.card_id        = card_id
+        self.card_specials  = card_specials
+
+    def jsonify(self):
+        return_dict = {}
+        return_dict["card_id"]          = self.card_id
+        return_dict["card_base"]        = self.card_base
+        return_dict["card_categories"]  = self.card_categories
+        return_dict["card_name"]        = self.card_name
+        return_dict["card_specials"]    = self.card_specials
+        return_dict["card_company"]     = self.card_company
+        return return_dict
 
     def __repr__(self):
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
