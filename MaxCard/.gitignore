@@ -41,3 +41,6 @@ yarn-error.*
 .expo
 dist/
 web-build/
+
+# Pycache
+*.pyc

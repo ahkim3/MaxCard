@@ -1,5 +1,6 @@
 import boto3
 from decimal import Decimal
+from flask import jsonify
 
 # List of functions:
 # get_cards()
@@ -20,6 +21,11 @@ class Card:
 
     def __repr__(self):
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
+
+class Cards:
+    def __init__(json_file):
+        self.cards = []
+        
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -64,7 +70,9 @@ def scan_dynamodb_table(table_name):
 # Returns a list of card objects in ascending primary key order
 def get_cards():
     cards = scan_dynamodb_table('cards')
+    print('aaaaaaa', cards)
     sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
+    return sorted_cards
         # formatting card_categories and card_specials into dictionaries
     for card in sorted_cards:
         card_categories_dict = {}
@@ -183,10 +191,10 @@ def get_best_cards(user_id, coordinates):
 
 ## Examples ----------------------
 
-# # get_cards() example
-# all_items = get_cards()
-# for card in all_items:
-#     print(card)
+# get_cards() example
+all_items = get_cards()
+for card in all_items:
+    print(card)
     
 # # get_card_id_from_name() example
 # card_name_to_search = 'Real Card'

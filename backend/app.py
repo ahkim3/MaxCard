@@ -12,9 +12,8 @@ def hello_world():
 # Example stub for getting all cards with a query parameter for user_id
 @app.route("/get_all_cards", methods=['GET'])
 def get_all_cards():
-    user_id = request.args.get('user_id', '')  # Possibly generating a number based off hashing the name of the card or some similar
     all_items = database_query.get_cards()  # Make a call to the get_cards function in database_query.py
-    return jsonify(all_items)
+    return jsonify({"cards": all_items})
 
 # Stub for viewing account cards - this could also use user_id as a parameter
 @app.route("/view_account_cards", methods=['GET'])
