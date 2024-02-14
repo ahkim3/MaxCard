@@ -9,15 +9,15 @@ app = Flask(__name__)
 def hello_world():
     return "<p>Hello, World!</p><iframe src='https://giphy.com/embed/PSKAppO2LH56w' width='272' height='480' frameBorder='0' class='giphy-embed' allowFullScreen></iframe><img src='https://i.pinimg.com/originals/c5/52/8e/c5528e6c4bb0a0ed0b7a3fcf127c68a2.gif'>"
 
-# Example stub for getting all cards
+# get all the cards
 @app.route("/get_all_cards", methods=['GET'])
 def get_all_cards():
-    all_items = database_query.get_cards()  # Make a call to the get_cards function in database_query.py
-    # return all_items
-    return (all_items)
-    # return jsonify({"cards": all_items})
+    all_items = database_query.get_formatted_cards()  # Make a call to the get_cards function in database_query.py
+    json = jsonify(database_query.card_list_to_dict(all_items))
+    return json
 
-# Stub for viewing account cards - this could also use user_id as a parameter
+# skrrrrr pow pow pow shwwwooooo bang bang pop
+# example: /view_account_cards?user_id=0
 @app.route("/view_account_cards", methods=['GET'])
 def view_account_cards():
     user_id = request.args.get('user_id', '')
@@ -27,7 +27,8 @@ def view_account_cards():
     if (not account_cards):
         return "user not found"
     # return account_cards
-    return jsonify({"cards": account_cards})
+    json = jsonify(database_query.card_list_to_dict(account_cards))
+    return json
 
 # Stub for adding a new card
 @app.route("/add_card", methods=['POST'])

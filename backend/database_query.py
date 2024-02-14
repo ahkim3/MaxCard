@@ -20,42 +20,19 @@ class Card:
         self.card_id        = card_id
         self.card_specials  = card_specials
 
-    def jsonify(self):
-        return_dict = {}
-        return_dict["card_id"]          = self.card_id
-        return_dict["card_base"]        = self.card_base
-        return_dict["card_categories"]  = self.card_categories
-        return_dict["card_name"]        = self.card_name
-        return_dict["card_specials"]    = self.card_specials
-        return_dict["card_company"]     = self.card_company
-        return return_dict
+    # for jsonify purposes
+    def to_dict(self):
+        return {
+            'card_name': self.card_name,
+            'card_categories': self.card_categories,
+            'card_base': self.card_base,
+            'card_company': self.card_company,
+            'card_id': self.card_id,
+            'card_specials': self.card_specials
+        }
 
     def __repr__(self):
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
-
-class Cards:
-    def __init__(self, json_file):
-        self.cards = []
-        self.parse_json(json_file)
-
-    def parse_json(self, json_file):
-        try:
-            with open(json_file, 'r') as file:
-                data = json.load(file)
-                for item in data:
-                    card = Card(
-                        card_name=item.get('card_name'),
-                        card_categories=item.get('card_categories', {}),
-                        card_base=item.get('card_base'),
-                        card_company=item.get('card_company'),
-                        card_id=item.get('card_id'),
-                        card_specials=item.get('card_specials', {})
-                    )
-                    self.cards.append(card)
-        except FileNotFoundError:
-            print(f"File '{json_file}' not found.")
-        except Exception as e:
-            print(f"Error parsing JSON file: {str(e)}")
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -65,6 +42,23 @@ class User:
 
     def __repr__(self):
         return f"User(user_id={self.user_id}, user_cards={self.user_cards}, user_name={self.user_name})"
+
+def card_list_to_dict(card_list):
+    """
+    Convert a list of Card objects to a list of dictionaries.
+
+    Args:
+        card_list (list): A list of Card objects.
+
+    Returns:
+        list: A list of dictionaries representing each Card object.
+    """
+    card_dicts = []
+    for card in card_list:
+        card_dict = card.to_dict()
+        card_dicts.append(card_dict)
+    return card_dicts
+    
 
 def scan_dynamodb_table(table_name):
     """
@@ -104,10 +98,9 @@ def get_cards():
     return sorted_cards
 
 def get_formatted_cards():
-    cards = scan_dynamodb_table('cards')
-    sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
+    cards = get_cards()
     # formatting card_categories and card_specials into dictionaries
-    for card in sorted_cards:
+    for card in cards:
         card_categories_dict = {}
         for category_item in card['card_categories']:
             inner_key, inner_value = category_item.popitem()
@@ -119,7 +112,7 @@ def get_formatted_cards():
             card_specials_dict[inner_key] = int(inner_value)
         card['card_specials'] = card_specials_dict
 
-    card_objects = [Card(**item) for item in sorted_cards]
+    card_objects = [Card(**item) for item in cards]
     return card_objects
 
 # Takes a card name and returns the corresponding id if it exists
@@ -164,7 +157,6 @@ def get_user_cards(user_id):
     users_table_name = 'users'
     dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     users_table = dynamodb.Table(users_table_name)
-    print('user id is ', user_id)
     try:
         response = users_table.get_item(Key={'user_id': user_id})
         user_item = response.get('Item')
@@ -247,10 +239,6 @@ def get_best_cards(user_id, coordinates):
 # # get_user_cards() example:
 # user_id_to_query = 0 
 # user_cards_details = get_user_cards(user_id_to_query)
-# print(user_cards_details)
-# print(user_cards_details[0].card_categories)
-    
-# # Example usage:
-# cards = Cards(jsonify({"cards" : get_cards()}))
-# for card in cards.cards:
-#     print(card)
+# # print(user_cards_details)
+# # print(user_cards_details[0].card_categories)
+# print(card_list_to_dict(user_cards_details))
