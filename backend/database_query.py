@@ -1,7 +1,5 @@
 import boto3
 from decimal import Decimal
-from flask import jsonify
-import json
 
 # List of functions:
 # get_cards()
@@ -40,6 +38,14 @@ class User:
         self.user_cards = user_cards
         self.user_name = user_name
 
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'user_cards': self.user_cards,
+            'user_name' : self.user_name
+        }
+
+
     def __repr__(self):
         return f"User(user_id={self.user_id}, user_cards={self.user_cards}, user_name={self.user_name})"
 
@@ -58,6 +64,13 @@ def card_list_to_dict(card_list):
         card_dict = card.to_dict()
         card_dicts.append(card_dict)
     return card_dicts
+
+def user_list_to_dict(user_list):
+    user_dicts = []
+    for user in user_list:
+        user_dict = user.to_dict()
+        user_dicts.append(user_dict)
+    return user_dicts
     
 
 def scan_dynamodb_table(table_name):
