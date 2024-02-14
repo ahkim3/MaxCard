@@ -1,6 +1,7 @@
 import boto3
 from decimal import Decimal
 from flask import jsonify
+import json
 
 # List of functions:
 # get_cards()
@@ -33,9 +34,28 @@ class Card:
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
 
 class Cards:
-    def __init__(json_file):
+    def __init__(self, json_file):
         self.cards = []
-        
+        self.parse_json(json_file)
+
+    def parse_json(self, json_file):
+        try:
+            with open(json_file, 'r') as file:
+                data = json.load(file)
+                for item in data:
+                    card = Card(
+                        card_name=item.get('card_name'),
+                        card_categories=item.get('card_categories', {}),
+                        card_base=item.get('card_base'),
+                        card_company=item.get('card_company'),
+                        card_id=item.get('card_id'),
+                        card_specials=item.get('card_specials', {})
+                    )
+                    self.cards.append(card)
+        except FileNotFoundError:
+            print(f"File '{json_file}' not found.")
+        except Exception as e:
+            print(f"Error parsing JSON file: {str(e)}")
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -80,10 +100,13 @@ def scan_dynamodb_table(table_name):
 # Returns a list of card objects in ascending primary key order
 def get_cards():
     cards = scan_dynamodb_table('cards')
-    print('aaaaaaa', cards)
     sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
     return sorted_cards
-        # formatting card_categories and card_specials into dictionaries
+
+def get_formatted_cards():
+    cards = scan_dynamodb_table('cards')
+    sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
+    # formatting card_categories and card_specials into dictionaries
     for card in sorted_cards:
         card_categories_dict = {}
         for category_item in card['card_categories']:
@@ -137,10 +160,11 @@ def get_users():
 
 # returns the list of cards owned by a user
 def get_user_cards(user_id):
+    user_id = int(user_id)
     users_table_name = 'users'
     dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     users_table = dynamodb.Table(users_table_name)
-
+    print('user id is ', user_id)
     try:
         response = users_table.get_item(Key={'user_id': user_id})
         user_item = response.get('Item')
@@ -152,7 +176,7 @@ def get_user_cards(user_id):
         card_ids = user_item.get('user_cards', [])
 
         # Get card objects using get_cards function
-        all_cards = get_cards()
+        all_cards = get_formatted_cards()
 
         # Filter card objects based on user's card_ids
         user_cards = [card for card in all_cards if card.card_id in card_ids]
@@ -170,6 +194,7 @@ def nearest_locations(coordinates):
 # pseudocode
 # takes the coordinates, returns a map of the best cards
 def get_best_cards(user_id, coordinates):
+    user_id = int(user_id)
     # get nearest locations
     nearest_locations = nearest_locations(coordinates)
     # get user cards
@@ -202,9 +227,9 @@ def get_best_cards(user_id, coordinates):
 ## Examples ----------------------
 
 # get_cards() example
-all_items = get_cards()
-for card in all_items:
-    print(card)
+# all_items = get_cards()
+# for card in all_items:
+#     print(card)
     
 # # get_card_id_from_name() example
 # card_name_to_search = 'Real Card'
@@ -224,3 +249,8 @@ for card in all_items:
 # user_cards_details = get_user_cards(user_id_to_query)
 # print(user_cards_details)
 # print(user_cards_details[0].card_categories)
+    
+# # Example usage:
+# cards = Cards(jsonify({"cards" : get_cards()}))
+# for card in cards.cards:
+#     print(card)
