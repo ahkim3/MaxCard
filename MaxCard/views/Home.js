@@ -17,7 +17,7 @@ const Home = () => {
     <View style={styles.container}>
       <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
         <Image 
-            source={require("./assets/logo_alternate.png")} 
+            source={require("./../assets/logo_alternate.png")} 
             resizeMode="contain" 
             style={styles.logo}
         />
@@ -26,7 +26,7 @@ const Home = () => {
       </LinearGradient>
       <View style={styles.cardContainer}>
         <Image
-          source={require("./assets/card.png")}
+          source={require("./../assets/card.png")}
           style={styles.card}
           resizeMode="contain"
         />
@@ -53,7 +53,7 @@ const Home = () => {
             onPress={console.log("Wallet button pressed!")}
           >
             <Image
-              source={require("./assets/wallet.png")}
+              source={require("./../assets/wallet.png")}
               resizeMode="contain"
               style={styles.navWallet}
             />
@@ -64,7 +64,7 @@ const Home = () => {
             onPress={console.log("Settings button pressed!")}
           >
             <Image
-              source={require("./assets/settings.png")}
+              source={require("./../assets/settings.png")}
               resizeMode="contain"
               style={styles.navSettings}
             />
