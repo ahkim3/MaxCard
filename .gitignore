@@ -133,3 +133,8 @@ dist
 *.pyc
 __pycache__/
 
+# Testing/Linting
+.pytest_cache/
+.coverage
+.ruff_cache/
+junit/
