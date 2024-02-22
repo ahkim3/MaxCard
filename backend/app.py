@@ -1,7 +1,8 @@
 # File with all the flask logic
 
 from flask import Flask, jsonify, request
-import database_query, database_service
+import database_query
+import database_service
 
 app = Flask(__name__)
 
