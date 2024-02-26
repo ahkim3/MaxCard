@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavBar } from "./Home";
 import {
@@ -31,6 +31,11 @@ export function AlternateLocations() {
       <LinearGradient
         colors={['#2C506F', 'black']}
         style={styles.background}>
+        <Image
+            source={require("./../assets/logo-bg.png")}
+            resizeMode="contain"
+            style={styles.logo}
+        />
         <Text style={styles.title}>Alternate Locations:</Text>
         <Button location='location 1'/>
         <Button location='location 2'/>
@@ -62,6 +67,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     rowGap: 25,
+  },
+  logo: {
+    position: 'absolute',
+    top: 0
   },
   text: {
     fontFamily: 'Jost_500Medium',
