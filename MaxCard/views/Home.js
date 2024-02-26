@@ -12,34 +12,9 @@ import { LinearGradient } from "expo-linear-gradient";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-const Home = () => {
+export const NavBar = () => {
   return (
-    <View style={styles.container}>
-      <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
-        <Image 
-            source={require("./../assets/logo_alternate.png")} 
-            resizeMode="contain" 
-            style={styles.logo}
-        />
-        <Text style={styles.text}>Best Card For: </Text>
-        <Text style={styles.text}>Potential Energy Cafe</Text>
-      </LinearGradient>
-      <View style={styles.cardContainer}>
-        <Image
-          source={require("./../assets/card.png")}
-          style={styles.card}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="I'M NOT HERE"
-          onPress={console.log("Button pressed!")}
-          style={styles.button}
-          color={"white"}
-        />
-      </View>
-      <View style={styles.navContainer}>
+    <View style={styles.navContainer}>
         <View style={styles.nav}>
           <TouchableOpacity
             style={styles.navItems}
@@ -71,6 +46,37 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
+  );
+}
+
+const Home = () => {
+  return (
+    <View style={styles.container}>
+      <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
+        <Image 
+            source={require("./../assets/logo_alternate.png")} 
+            resizeMode="contain" 
+            style={styles.logo}
+        />
+        <Text style={styles.text}>Best Card For: </Text>
+        <Text style={styles.text}>Potential Energy Cafe</Text>
+      </LinearGradient>
+      <View style={styles.cardContainer}>
+        <Image
+          source={require("./../assets/card.png")}
+          style={styles.card}
+          resizeMode="contain"
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="I'M NOT HERE"
+          onPress={console.log("Button pressed!")}
+          style={styles.button}
+          color={"white"}
+        />
+      </View>
+      <NavBar/>
     </View>
   );
 }
