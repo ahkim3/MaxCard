@@ -10,13 +10,24 @@ from decimal import Decimal
 REGION_NAME = 'us-east-1'
 
 class Card:
-    def __init__(self, card_name, card_categories, card_base, card_company, card_id, card_specials):
-        self.card_name = card_name
-        self.card_categories = card_categories
-        self.card_base = card_base
-        self.card_company = card_company
-        self.card_id = card_id
-        self.card_specials = card_specials
+    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_id:int, card_specials:dict):
+        self.card_name      = card_name
+        self.card_categories= card_categories
+        self.card_base      = card_base
+        self.card_company   = card_company
+        self.card_id        = card_id
+        self.card_specials  = card_specials
+
+    # for jsonify purposes
+    def to_dict(self):
+        return {
+            'card_name': self.card_name,
+            'card_categories': self.card_categories,
+            'card_base': self.card_base,
+            'card_company': self.card_company,
+            'card_id': self.card_id,
+            'card_specials': self.card_specials
+        }
 
     def __repr__(self):
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
@@ -27,8 +38,40 @@ class User:
         self.user_cards = user_cards
         self.user_name = user_name
 
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'user_cards': self.user_cards,
+            'user_name' : self.user_name
+        }
+
+
     def __repr__(self):
         return f"User(user_id={self.user_id}, user_cards={self.user_cards}, user_name={self.user_name})"
+
+def card_list_to_dict(card_list):
+    """
+    Convert a list of Card objects to a list of dictionaries.
+
+    Args:
+        card_list (list): A list of Card objects.
+
+    Returns:
+        list: A list of dictionaries representing each Card object.
+    """
+    card_dicts = []
+    for card in card_list:
+        card_dict = card.to_dict()
+        card_dicts.append(card_dict)
+    return card_dicts
+
+def user_list_to_dict(user_list):
+    user_dicts = []
+    for user in user_list:
+        user_dict = user.to_dict()
+        user_dicts.append(user_dict)
+    return user_dicts
+    
 
 def scan_dynamodb_table(table_name):
     """
@@ -65,8 +108,12 @@ def scan_dynamodb_table(table_name):
 def get_cards():
     cards = scan_dynamodb_table('cards')
     sorted_cards = sorted(cards, key=lambda x: x.get('card_id', 0))
-        # formatting card_categories and card_specials into dictionaries
-    for card in sorted_cards:
+    return sorted_cards
+
+def get_formatted_cards():
+    cards = get_cards()
+    # formatting card_categories and card_specials into dictionaries
+    for card in cards:
         card_categories_dict = {}
         for category_item in card['card_categories']:
             inner_key, inner_value = category_item.popitem()
@@ -78,7 +125,7 @@ def get_cards():
             card_specials_dict[inner_key] = int(inner_value)
         card['card_specials'] = card_specials_dict
 
-    card_objects = [Card(**item) for item in sorted_cards]
+    card_objects = [Card(**item) for item in cards]
     return card_objects
 
 # Takes a card name and returns the corresponding id if it exists
@@ -119,10 +166,10 @@ def get_users():
 
 # returns the list of cards owned by a user
 def get_user_cards(user_id):
+    user_id = int(user_id)
     users_table_name = 'users'
     dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     users_table = dynamodb.Table(users_table_name)
-
     try:
         response = users_table.get_item(Key={'user_id': user_id})
         user_item = response.get('Item')
@@ -134,7 +181,7 @@ def get_user_cards(user_id):
         card_ids = user_item.get('user_cards', [])
 
         # Get card objects using get_cards function
-        all_cards = get_cards()
+        all_cards = get_formatted_cards()
 
         # Filter card objects based on user's card_ids
         user_cards = [card for card in all_cards if card.card_id in card_ids]
@@ -152,6 +199,7 @@ def nearest_locations(coordinates):
 # pseudocode
 # takes the coordinates, returns a map of the best cards
 def get_best_cards(user_id, coordinates):
+    user_id = int(user_id)
     # get nearest locations
     nearest_locations = nearest_locations(coordinates)
     # get user cards
@@ -183,7 +231,7 @@ def get_best_cards(user_id, coordinates):
 
 ## Examples ----------------------
 
-# # get_cards() example
+# get_cards() example
 # all_items = get_cards()
 # for card in all_items:
 #     print(card)
@@ -204,5 +252,6 @@ def get_best_cards(user_id, coordinates):
 # # get_user_cards() example:
 # user_id_to_query = 0 
 # user_cards_details = get_user_cards(user_id_to_query)
-# print(user_cards_details)
-# print(user_cards_details[0].card_categories)
+# # print(user_cards_details)
+# # print(user_cards_details[0].card_categories)
+# print(card_list_to_dict(user_cards_details))
