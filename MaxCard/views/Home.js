@@ -7,18 +7,25 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import { GetLocationCards } from "../data";
 import { LinearGradient } from "expo-linear-gradient";
+import {
+  useFonts,
+  Jost_500Medium,
+  Jost_700Bold
+} from '@expo-google-fonts/jost';
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-export const NavBar = () => {
+export const NavBar = ({navigation}) => {
   return (
     <View style={styles.navContainer}>
         <View style={styles.nav}>
           <TouchableOpacity
             style={styles.navItems}
-            onPress={console.log("Back button pressed!")}
+            onPress={() =>
+              navigation.goBack()}
           >
             <Text style={styles.navBack}>{"<"}</Text>
           </TouchableOpacity>
@@ -49,36 +56,45 @@ export const NavBar = () => {
   );
 }
 
-const Home = () => {
-  return (
-    <View style={styles.container}>
-      <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
-        <Image 
-            source={require("./../assets/logo_alternate.png")} 
-            resizeMode="contain" 
-            style={styles.logo}
-        />
-        <Text style={styles.text}>Best Card For: </Text>
-        <Text style={styles.text}>Potential Energy Cafe</Text>
-      </LinearGradient>
-      <View style={styles.cardContainer}>
-        <Image
-          source={require("./../assets/card.png")}
-          style={styles.card}
-          resizeMode="contain"
-        />
+export const Home = ({route, navigation}) => {
+  const {locations} = route.params;
+  console.log("home locations: " + JSON.stringify(locations));
+  let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
+  if(!fontsLoaded) {
+    return;
+  } else {
+    return (
+      <View style={styles.container}>
+        <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
+          <Image 
+              source={require("./../assets/logo_alternate.png")} 
+              resizeMode="contain" 
+              style={styles.logo}
+          />
+          <Text style={styles.text}>Best Card For: </Text>
+          <Text style={styles.text}>Potential Energy Cafe</Text>
+        </LinearGradient>
+        <View style={styles.cardContainer}>
+          <Image
+            source={require("./../assets/card.png")}
+            style={styles.card}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="I'M NOT HERE"
+            onPress={() =>
+              navigation.navigate('AlternateLocations', {locations: locations})
+            }
+            style={styles.button}
+            color={"white"}
+          />
+        </View>
+        <NavBar/>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="I'M NOT HERE"
-          onPress={console.log("Button pressed!")}
-          style={styles.button}
-          color={"white"}
-        />
-      </View>
-      <NavBar/>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -165,5 +181,3 @@ const styles = StyleSheet.create({
     zIndex: 1, 
   }
 });
-
-export default Home;

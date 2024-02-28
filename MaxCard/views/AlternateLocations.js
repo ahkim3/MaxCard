@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavBar } from "./Home";
 import {
@@ -22,8 +29,9 @@ const Button = props => {
   );
 }
 
-export function AlternateLocations() {
+export function AlternateLocations({navigation, locations}) {
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
+  console.log(JSON.stringify(locations, null, 2));
   if(!fontsLoaded) {
     return;
   } else {
@@ -50,7 +58,7 @@ export function AlternateLocations() {
           </LinearGradient>
         </TouchableOpacity>
         <View style={{position: 'absolute', top: screenHeight}}>
-          <NavBar/>
+          <NavBar navigation={navigation}/>
         </View>
       </LinearGradient>
     );
