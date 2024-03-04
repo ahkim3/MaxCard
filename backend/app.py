@@ -2,6 +2,9 @@
 
 from flask import Flask, jsonify, request
 import database_query, database_service
+import googlemaps
+import os
+from math import radians, sin, cos, sqrt, atan2
 
 app = Flask(__name__)
 
@@ -144,6 +147,73 @@ def remove_card_from_user():
     else:
         return jsonify({"error": "Could not remove card {card_id} from user {user_id}"}), 400
 
+# return the nearest locations
+# example using sparkys as the given location: /get_location?latitude=38.95082173840749&longitude=-92.32771776690679
+@app.route("/get_location", methods=['GET'])
+def get_location():
+    latitude = request.args.get("latitude")
+    longitude = request.args.get("longitude")
+    if not (latitude or longitude):
+        return jsonify({"error": "Missing required parameters"}), 400
+    
+    try:
+        latitude = float(latitude)
+        longitude = float(longitude)
+    except ValueError:
+        return jsonify({"error": "Invalid latitude or longitude"}), 400
+
+    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+
+    # Check if the API key is set
+    if not GOOGLE_MAPS_API_KEY:
+        raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
+    
+    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+
+    # search radius is 1000 meters
+    search_radius = 1000 
+
+    # # PRONE TO CHANGE
+    # search_type = 'store'
+    # # places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius, type=search_type)
+
+    # google maps api doesn't allow tuples for the category type, so just search for everything and then filter on our side
+    places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius)
+
+    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'lodging', 'gas_station']
+    nearby_locations = []
+    # Calculate distance and add location information to the list
+    for place in places['results']:
+        place_types = place.get('types', [])
+        if any(place_type in valid_types for place_type in place_types):
+            location_info = {
+                'name': place['name'],
+                'address': place['vicinity'],
+                'types': place_types
+
+            }
+
+            # Check if the place has photos
+            if 'photos' in place:
+                # Get the reference of the first photo
+                photo_reference = place['photos'][0]['photo_reference']
+                # Construct the photo URL using the reference
+                # shit dawg. is this potentially dangerous? it gives the key as a URL ... but also google automatically filters out the sensitive information after browsing it
+                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+                # Add the photo URL to the location information
+                location_info['photo_url'] = photo_url
+            
+            # Calculate distance between user's location and the place
+            distance = calculate_distance(latitude, longitude, place['geometry']['location']['lat'], place['geometry']['location']['lng'])
+            
+            # Add distance to the location information
+            location_info['distance'] = distance
+            
+            nearby_locations.append(location_info)
+
+    nearby_locations.sort(key=lambda x: x['distance'])
+
+    return jsonify(nearby_locations)
 
 # Stub for getting location-based cards
 @app.route("/get_location_cards", methods=['GET'])
@@ -158,6 +228,28 @@ def get_location_cards():
         ]
     }
     return jsonify(sample_data)
+
+## WTF AM I DOING 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # Radius of the Earth in kilometers
+    R = 6371.0
+    
+    # Convert latitude and longitude from degrees to radians
+    lat1_rad = radians(lat1)
+    lon1_rad = radians(lon1)
+    lat2_rad = radians(lat2)
+    lon2_rad = radians(lon2)
+    
+    # Compute the differences in coordinates
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    
+    # Calculate the distance using the Haversine formula
+    a = sin(dlat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distance = R * c
+    
+    return distance
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
