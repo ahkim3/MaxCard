@@ -233,14 +233,13 @@ def nearest_locations(latitude, longitude):
     # search radius is 1000 meters
     search_radius = 1000 
 
-    # # PRONE TO CHANGE
-    # search_type = 'store'
-    # # places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius, type=search_type)
-
     # google maps api doesn't allow tuples for the category type, so just search for everything and then filter on our side
     places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius)
+    
+    # UNCOMMENT THIS LINE FOR DEBUGGING
+    ## return places
 
-    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'lodging', 'gas_station']
+    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'bar', 'lodging', 'gas_station']
     nearby_locations = []
     # Calculate distance and add location information to the list
     for place in places['results']:
@@ -382,3 +381,9 @@ def get_best_cards(user_id, latitude, longitude):
 # user_id = 1
 # best_cards = get_best_cards(user_id, latitude, longitude)
 # print(best_cards)
+# # Prints the name of the nearest location
+# print(best_cards[0][0])
+# # Prints the id of the best card for the nearest location
+# print(best_cards[0][1])
+# # Prints the cashback rate of the best card for the nearest location
+# print(best_cards[0][2])
