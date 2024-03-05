@@ -211,6 +211,7 @@ def nearest_locations(latitude, longitude):
         return None
 
     GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+    GOOGLE_MAPS_API_KEY = 'AIzaSyArxFwoVKFHgai2pEUjEQkojsnEdJRKXko'
 
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
