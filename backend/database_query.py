@@ -224,6 +224,7 @@ def nearest_locations(latitude, longitude):
 
     GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
 
+
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
         raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
@@ -276,44 +277,77 @@ def nearest_locations(latitude, longitude):
     return nearby_locations
 
 # pseudocode
-# takes the coordinates, returns a map of the best cards
+# takes the coordinates and user id, gets the 6 nearest locations returns the best card for each location
+# might need to test some edge cases where there arent 6 locations nearby
 def get_best_cards(user_id, latitude, longitude):
-    user_id = int(user_id)
+    try:
+        user_id = int(user_id)
+        latitude = float(latitude)
+        longitude = float(longitude)
+    except ValueError:
+        return None
+    user_cards = card_list_to_dict(get_user_cards(user_id))
+    # invalid user_id
+    if (user_cards is None):
+        return None
     # get nearest locations
-    nearest_locations = nearest_locations(latitude, longitude)
+    nearby_locations = nearest_locations(latitude, longitude)
+    nearest_six = nearby_locations[:6]
     # get user cards
-    user_cards = get_user_cards(user_id)
+
     best_cards = {}
     # for each location, find the best card for that location and append it to best_cards
-    for location in nearest_locations:
+    for location in nearest_six:
         # keep track of the best card's id and its rate
         best_rate = 0
         best_card = 0
+
         for card in user_cards:
-            # check for specials
-            if (location.name in card.card_specials):
-                if(card.card_specials[location.name] > best_rate):
-                    best_rate = card.card_specials[location.name]
-                    best_card = card.card_id
-            # check for category rate
-            if (location.category in card.card_categories):
-                if(card.card_categories[location.category] > best_rate):
-                    best_rate = card.card_categories[location.category]
-                    best_card = card.card_id
+            card_specials = card['card_specials']
+            card_categories = card['card_categories']
+            card_base = card['card_base']
+            card_id = card['card_id']
+            location_name = location['name']
+
+            # check for specials -- match the location name to the name of any specials that the card might have
+            for special in card_specials:
+                if (location_name in special):
+                    if(card_specials[location_name] > best_rate):
+                        best_rate = card_specials[location_name]
+                        best_card = card_id
+            # check for category rate -- check each category of the vendor labeled by google maps
+            for category in location['types']:
+                for card_category in card_categories:
+                    if (category in card_category):
+                        if(card_categories[category] > best_rate):
+                            best_rate = card_categories[category]
+                            best_card = card_id
             # check for base rate
-            if (card.card_base_value > best_rate):
-                best_rate = card.card_base_value
-                best_card = card.card_id
+            if (card_base > best_rate):
+                best_rate = card_base
+                best_card = card_id
         # store the best card
-        best_cards[location.name] = best_card   
+        best_cards[location_name] = best_card   
     return best_cards
 
 ## Examples ----------------------
 
-# get_cards() example
+# # get_cards() example
 # all_items = get_cards()
 # for card in all_items:
-#     print(card)
+#     ## print each card
+#     # print(card)
+#     ## print out a specific section of a card
+#     # print(card['card_categories'])
+#     ## print out an even more specific section of a card
+#     for category in card['card_categories']:
+#         if 'grocery' in category:
+#             print("'grocery' found in category:", category)
+#             print(category['grocery'])
+#         else:
+#             # print("'grocery' not found in category:", category)
+#             print(' ')
+
     
 # # get_card_id_from_name() example
 # card_name_to_search = 'Real Card'
@@ -328,9 +362,23 @@ def get_best_cards(user_id, latitude, longitude):
 # for user in all_items:
 #     print(user)
 
-# # get_user_cards() example:
-# user_id_to_query = 0 
-# user_cards_details = get_user_cards(user_id_to_query)
-# # print(user_cards_details)
-# # print(user_cards_details[0].card_categories)
+## get_user_cards() example:
+#user_id_to_query = 0 
+#user_cards_details = get_user_cards(user_id_to_query)
+# print(user_cards_details)
+# print(user_cards_details[0].card_categories)
 # print(card_list_to_dict(user_cards_details))
+
+# # nearest_locations example:
+# latitude = 38.95082173840749
+# longitude = -92.32771776690679
+# nearest = nearest_locations(latitude, longitude)
+# for location in nearest:
+#     print(location['name'])
+
+# get_best_cards() example:
+latitude = 38.95082173840749
+longitude = -92.32771776690679
+user_id = 1
+best_cards = get_best_cards(user_id, latitude, longitude)
+print(best_cards)
