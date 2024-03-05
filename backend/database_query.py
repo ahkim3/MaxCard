@@ -224,7 +224,6 @@ def nearest_locations(latitude, longitude):
 
     GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
 
-
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
         raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
@@ -279,6 +278,7 @@ def nearest_locations(latitude, longitude):
 # pseudocode
 # takes the coordinates and user id, gets the 6 nearest locations returns the best card for each location
 # might need to test some edge cases where there arent 6 locations nearby
+# returns a list in the form of (Location, Card_ID, cashback_rate)
 def get_best_cards(user_id, latitude, longitude):
     try:
         user_id = int(user_id)
@@ -295,7 +295,7 @@ def get_best_cards(user_id, latitude, longitude):
     nearest_six = nearby_locations[:6]
     # get user cards
 
-    best_cards = {}
+    best_cards = []
     # for each location, find the best card for that location and append it to best_cards
     for location in nearest_six:
         # keep track of the best card's id and its rate
@@ -327,7 +327,7 @@ def get_best_cards(user_id, latitude, longitude):
                 best_rate = card_base
                 best_card = card_id
         # store the best card
-        best_cards[location_name] = best_card   
+        best_cards.append((location_name, best_card, best_rate))
     return best_cards
 
 ## Examples ----------------------
@@ -376,9 +376,9 @@ def get_best_cards(user_id, latitude, longitude):
 # for location in nearest:
 #     print(location['name'])
 
-# get_best_cards() example:
-latitude = 38.95082173840749
-longitude = -92.32771776690679
-user_id = 1
-best_cards = get_best_cards(user_id, latitude, longitude)
-print(best_cards)
+# # get_best_cards() example:
+# latitude = 38.95082173840749
+# longitude = -92.32771776690679
+# user_id = 1
+# best_cards = get_best_cards(user_id, latitude, longitude)
+# print(best_cards)
