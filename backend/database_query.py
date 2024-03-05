@@ -255,14 +255,11 @@ def nearest_locations(latitude, longitude):
     # Now all_places contains all places retrieved from different pages
     
     print(all_places)
-    # UNCOMMENT THIS LINE FOR DEBUGGING
-    deez_nuts = all_places['results']
-    # Get the names from the places list
-    names = [place['name'] for place in deez_nuts]
-
-    # Now 'names' contains just the names of the places
+    
+    ## UNCOMMENT THESE LINEs FOR DEBUGGING
+    testing = all_places['results']
+    names = [place['name'] for place in testing]
     print(names)
-
     return names
 
     valid_types = ['store', 'food', 'restaurant', 'drugstore', 'bar', 'lodging', 'gas_station']
