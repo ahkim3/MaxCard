@@ -223,6 +223,7 @@ def nearest_locations(latitude, longitude):
         return None
 
     GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+    GOOGLE_MAPS_API_KEY = 'AIzaSyArxFwoVKFHgai2pEUjEQkojsnEdJRKXko'
 
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
@@ -232,12 +233,37 @@ def nearest_locations(latitude, longitude):
 
     # search radius is 1000 meters
     search_radius = 1000 
+    all_places = []  # Initialize an empty list to store all places
 
-    # google maps api doesn't allow tuples for the category type, so just search for everything and then filter on our side
+    # Retrieve the first set of places
     places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius)
+
+    print('checkpoint 1')
+    # Append the places from the first request to the list
+    all_places.extend(places['results'])
+
+    # Check if there are more results available
+    while 'next_page_token' in places:
+        next_page_token = places['next_page_token']
+        print(next_page_token)
+        print('checkpoint 2')
+        places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius, page_token=next_page_token)
+        print('checkpoint 3')
+
+        all_places.extend(places['results'])  # Append the places from the current request to the list
+
+    # Now all_places contains all places retrieved from different pages
     
+    print(all_places)
     # UNCOMMENT THIS LINE FOR DEBUGGING
-    ## return places
+    deez_nuts = all_places['results']
+    # Get the names from the places list
+    names = [place['name'] for place in deez_nuts]
+
+    # Now 'names' contains just the names of the places
+    print(names)
+
+    return names
 
     valid_types = ['store', 'food', 'restaurant', 'drugstore', 'bar', 'lodging', 'gas_station']
     nearby_locations = []
