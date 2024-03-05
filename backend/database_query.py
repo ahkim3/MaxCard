@@ -3,6 +3,7 @@ from decimal import Decimal
 import googlemaps
 from math import radians, sin, cos, sqrt, atan2
 import os
+import requests
 
 # List of functions:
 # get_cards()
@@ -74,7 +75,7 @@ def user_list_to_dict(user_list):
         user_dict = user.to_dict()
         user_dicts.append(user_dict)
     return user_dicts
-    
+
 
 def scan_dynamodb_table(table_name):
     """
@@ -120,7 +121,7 @@ def get_formatted_cards():
         card_categories_dict = {}
         for category_item in card['card_categories']:
             inner_key, inner_value = category_item.popitem()
-            card_categories_dict[inner_key] = int(inner_value) 
+            card_categories_dict[inner_key] = int(inner_value)
         card['card_categories'] = card_categories_dict
         card_specials_dict = {}
         for special_item in card['card_specials']:
@@ -194,28 +195,15 @@ def get_user_cards(user_id):
     except Exception as e:
         print(f"Error retrieving user cards: {str(e)}")
         return None
-    
-## WTF AM I DOING 
-def calculate_distance(lat1, lon1, lat2, lon2):
-    # Radius of the Earth in kilometers
-    R = 6371.0
-    
-    # Convert latitude and longitude from degrees to radians
-    lat1_rad = radians(lat1)
-    lon1_rad = radians(lon1)
-    lat2_rad = radians(lat2)
-    lon2_rad = radians(lon2)
-    
-    # Compute the differences in coordinates
-    dlat = lat2_rad - lat1_rad
-    dlon = lon2_rad - lon1_rad
-    
-    # Calculate the distance using the Haversine formula
-    a = sin(dlat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = R * c
-    
-    return distance
+
+def get_resolved_url(url):
+    try:
+        response = requests.head(url, allow_redirects=True)
+        resolved_url = response.url
+        return resolved_url
+    except requests.RequestException as e:
+        print("Error fetching URL:", e)
+        return "https://media.licdn.com/dms/image/C4D03AQFG-XnlnkNM0w/profile-displayphoto-shrink_200_200/0/1614214136294?e=2147483647&v=beta&t=YErihHr6isIHpwfLATetdd9R_tuEZQdgRtR0E7Q0QnE" # Default image
 
 # takes the coordinates and returns the nearest locations
 def nearest_locations(latitude, longitude):
@@ -227,22 +215,36 @@ def nearest_locations(latitude, longitude):
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
         raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
-    
+
+    nearby_locations = []
+
     gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
 
-    # search radius is 1000 meters
-    search_radius = 1000 
+    location = (latitude, longitude)
+    max_results = 10
+    how_to_rank = 'distance'
+    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'pharmacy', 'bar', 'lodging', 'gas_station']
 
-    # google maps api doesn't allow tuples for the category type, so just search for everything and then filter on our side
-    places = gmaps.places_nearby(location=(latitude, longitude), radius=search_radius)
-    
-    # UNCOMMENT THIS LINE FOR DEBUGGING
-    ## return places
+    places_result = gmaps.places_nearby(
+        location=location,
+        radius=None,
+        keyword=None,
+        language=None,
+        min_price=None,
+        max_price=None,
+        name=None,
+        open_now=False,
+        rank_by=how_to_rank,
+        type=valid_types,
+        page_token=None
+    )
 
-    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'bar', 'lodging', 'gas_station']
-    nearby_locations = []
+    results = places_result['results'][:max_results]
+
+
+
     # Calculate distance and add location information to the list
-    for place in places['results']:
+    for place in results:
         place_types = place.get('types', [])
         if any(place_type in valid_types for place_type in place_types):
             location_info = {
@@ -257,24 +259,17 @@ def nearest_locations(latitude, longitude):
                 # Get the reference of the first photo
                 photo_reference = place['photos'][0]['photo_reference']
                 # Construct the photo URL using the reference
-                # shit dawg. is this potentially dangerous? it gives the key as a URL ... but also google automatically filters out the sensitive information after browsing it
-                photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+
+                # Resolve photo URL
+                photo_url = get_resolved_url(unsanitized_photo_url)
+
                 # Add the photo URL to the location information
                 location_info['photo_url'] = photo_url
-            
-            # Calculate distance between user's location and the place
-            distance = calculate_distance(latitude, longitude, place['geometry']['location']['lat'], place['geometry']['location']['lng'])
-            
-            # Add distance to the location information
-            location_info['distance'] = distance
-            
-            nearby_locations.append(location_info)
 
-    nearby_locations.sort(key=lambda x: x['distance'])
-    
+            nearby_locations.append(location_info)
     return nearby_locations
 
-# pseudocode
 # takes the coordinates and user id, gets the 6 nearest locations returns the best card for each location
 # might need to test some edge cases where there arent 6 locations nearby
 # returns a list in the form of (Location, Card_ID, cashback_rate)
@@ -329,7 +324,7 @@ def get_best_cards(user_id, latitude, longitude):
         best_cards.append((location_name, best_card, best_rate))
     return best_cards
 
-## Examples ----------------------
+## DEBUG Examples ----------------------
 
 # # get_cards() example
 # all_items = get_cards()
@@ -347,7 +342,7 @@ def get_best_cards(user_id, latitude, longitude):
 #             # print("'grocery' not found in category:", category)
 #             print(' ')
 
-    
+
 # # get_card_id_from_name() example
 # card_name_to_search = 'Real Card'
 # card_id_result = get_card_id_from_name(card_name_to_search)
@@ -362,7 +357,7 @@ def get_best_cards(user_id, latitude, longitude):
 #     print(user)
 
 ## get_user_cards() example:
-#user_id_to_query = 0 
+#user_id_to_query = 0
 #user_cards_details = get_user_cards(user_id_to_query)
 # print(user_cards_details)
 # print(user_cards_details[0].card_categories)
@@ -373,7 +368,7 @@ def get_best_cards(user_id, latitude, longitude):
 # longitude = -92.32771776690679
 # nearest = nearest_locations(latitude, longitude)
 # for location in nearest:
-#     print(location['name'])
+#     print(location)
 
 # # get_best_cards() example:
 # latitude = 38.95082173840749
