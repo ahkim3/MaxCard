@@ -2,7 +2,6 @@
 
 from flask import Flask, jsonify, request
 import database_query, database_service
-import os
 
 app = Flask(__name__)
 
