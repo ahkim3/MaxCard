@@ -205,13 +205,12 @@ def get_resolved_url(url):
         print("Error fetching URL:", e)
         return "https://media.licdn.com/dms/image/C4D03AQFG-XnlnkNM0w/profile-displayphoto-shrink_200_200/0/1614214136294?e=2147483647&v=beta&t=YErihHr6isIHpwfLATetdd9R_tuEZQdgRtR0E7Q0QnE" # Default image
 
-# takes the coordinates and returns the nearest locations
+# takes the coordinates and returns locations (1 prominent location, followed by closest locations)
 def nearest_locations(latitude, longitude):
     if not (latitude or longitude):
         return None
 
     GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
-    GOOGLE_MAPS_API_KEY = 'AIzaSyArxFwoVKFHgai2pEUjEQkojsnEdJRKXko'
 
     # Check if the API key is set
     if not GOOGLE_MAPS_API_KEY:
@@ -254,6 +253,10 @@ def nearest_locations(latitude, longitude):
                 'types': place_types
 
             }
+
+            # Skip this place if it doesn't have a rating
+            if not 'rating' in place:
+                continue
 
             # Check if the place has photos
             if 'photos' in place:
