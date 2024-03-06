@@ -2,6 +2,7 @@
 
 from flask import Flask, jsonify, request
 import database_query, database_service
+import os
 
 app = Flask(__name__)
 
@@ -144,20 +145,69 @@ def remove_card_from_user():
     else:
         return jsonify({"error": "Could not remove card {card_id} from user {user_id}"}), 400
 
+# return the nearest locations
+# example using sparkys as the given location: 
+# /get_location?latitude=38.95082173840749&longitude=-92.32771776690679
+# example using see_full:
+# /get_location?latitude=38.95082173840749&longitude=-92.32771776690679&see_full=TRUE
+# by default returns the closest 6 areas, 1 primary area and 5 alternatives
+# optional argument of see_full, which returns the entire list of nearby areas
+@app.route("/get_location", methods=['GET'])
+def get_location():
+    latitude = request.args.get("latitude")
+    longitude = request.args.get("longitude")
+    if not (latitude or longitude):
+        return jsonify({"error": "Missing required parameters"}), 400
+    
+    try:
+        latitude = float(latitude)
+        longitude = float(longitude)
+    except ValueError:
+        return jsonify({"error": "Invalid latitude or longitude"}), 400
+    
+    see_full = request.args.get("see_full")
+    if see_full and see_full.lower() == 'true':
+        see_full = True
+    else:
+        see_full = False
+    
+    nearby_locations = database_query.nearest_locations(latitude, longitude)
 
-# Stub for getting location-based cards
+    if (nearby_locations is None):
+        return jsonify({"error": "Something went wrong"}), 400
+    
+    if see_full:
+        return jsonify(nearby_locations)
+    else:
+        return jsonify(nearby_locations[:6])
+
+# get best cards for 6 closest locations
+# example: get_location_cards?user_id=1&latitude=38.95082173840749&longitude=-92.32771776690679
 @app.route("/get_location_cards", methods=['GET'])
 def get_location_cards():
-    gps_data = request.args.get('gps_data', '')  # Here we will likely interact with the google api for
-    # gps coordinates.
-    sample_data = {
-        "gps_data": gps_data,
-        "location_cards": [
-            {"card_id": "5", "card_name": "Location Card One"},
-            {"card_id": "6", "card_name": "Location Card Two"},
-        ]
-    }
-    return jsonify(sample_data)
+    user_id = request.args.get("user_id")
+    latitude = request.args.get("latitude")
+    longitude = request.args.get("longitude")
+    if not (latitude or longitude or user_id):
+        return jsonify({"error": "Missing required parameters"}), 400
+    
+    try:
+        latitude = float(latitude)
+        longitude = float(longitude)
+    except ValueError:
+        return jsonify({"error": "Invalid latitude or longitude"}), 400
+    
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return jsonify({"error": "Invalid user_id"}), 400
+    
+    best_cards = database_query.get_best_cards(user_id, latitude, longitude)
+   
+    if (best_cards is None):
+        return jsonify({"error": "Something went wrong"}), 400
+    return jsonify(best_cards)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
