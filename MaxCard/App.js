@@ -16,9 +16,11 @@ export default function App() {
 
   // Gets the list of matching cards based on a user's location
   // The card first on the list is the best match
-  const GetLocationCards = async(userId)  => {
-      let url = "http://44.220.169.6:5000/get_location_cards?user_id=";
-      url.concat(userId);
+  const GetLocations = async()  => {
+      // TO DO: get native latitude and longitude
+      let latitude = 38.95082173840749;
+      let longitude = -92.32771776690679;
+      let url = "http://44.220.169.6:5000/get_location?latitude=" + latitude + "&longitude=" + longitude;
       try {
           const response = await fetch(url);
           const json = await response.json();
@@ -32,7 +34,7 @@ export default function App() {
       }
   };
   useEffect(() => {
-    GetLocationCards(1);
+    GetLocations();
   }, []);
   return (
     <NavigationContainer>
