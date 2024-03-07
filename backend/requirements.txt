@@ -1,4 +1,4 @@
 boto3
 flask
-googlemaps
+googlemaps==4.2.0
 requests
