@@ -113,11 +113,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  // background: {
-  //   height: screenHeight,
-  //   width: screenWidth,
-  //   zIndex: 0,
-  // },
   background: {
     flex: 1,
     height: screenHeight,
@@ -161,28 +156,9 @@ const styles = StyleSheet.create({
     margin: 25
   },
   cardContainer: {
-    // position: "absolute",
-    // top: screenHeight * 0.12, // Adjust the value to position the card vertically
-    // alignItems: "center",
-    // zIndex: 1,
     margin: 25,
 
   },
-  // buttonContainer: {
-  //   position: "absolute",
-  //   top: screenHeight * 0.7,
-  //   alignItems: "center",
-  //   zIndex: 1,
-  //   backgroundColor: "#2C506F",
-  //   borderRadius: 30,
-  // },
-  // button: {
-  //   justifyContent: "center",
-  //   textDecorationLine: "none",
-  //   textDecorationColor: "black",
-  //   color: "black",
-  //   fontSize: 16,
-  // },
   buttonContainer: {
     height: 53,
     width: 196,
@@ -224,14 +200,6 @@ const styles = StyleSheet.create({
     color: "gray",
     marginTop: 0.03 * screenHeight,
   },
-  // logo: {
-  //   position:"absolute",
-  //   top: -0.22 * screenHeight,
-  //   left: 0.3 * screenWidth,
-  //   height: 0.8 * screenHeight,
-  //   width: 0.8 * screenWidth,
-  //   zIndex: 1, 
-  // }
   logo: {
     position: 'absolute',
     top: 0
