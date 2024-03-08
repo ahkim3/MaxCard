@@ -57,8 +57,7 @@ export const NavBar = ({navigation}) => {
 }
 
 export const Home = ({route, navigation}) => {
-  const {locations} = route.params;
-  console.log("home locations: " + JSON.stringify(locations));
+  const {locations, curLocation} = route.params;
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;
@@ -72,7 +71,7 @@ export const Home = ({route, navigation}) => {
               style={styles.logo}
           />
           <Text style={styles.text}>Best Card For: </Text>
-          <Text style={styles.text}>Potential Energy Cafe</Text>
+          <Text style={styles.text}>{curLocation.name}</Text>
         </LinearGradient>
         <View style={styles.cardContainer}>
           <Image

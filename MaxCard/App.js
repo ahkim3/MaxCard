@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [locationData, SetLocationData] = useState([]);
 
   // Gets the list of matching cards based on a user's location
   // The card first on the list is the best match
@@ -22,10 +22,13 @@ export default function App() {
       let longitude = -92.32771776690679;
       let url = "http://44.220.169.6:5000/get_location?latitude=" + latitude + "&longitude=" + longitude;
       try {
-          const response = await fetch(url);
+          const response = await fetch(url, {
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
           const json = await response.json();
-          setData(json.location_cards);
-          console.log(JSON.stringify(data));
+          SetLocationData(json);
       } catch (error) {
           console.error(error);
       } finally {
@@ -37,20 +40,23 @@ export default function App() {
     GetLocations();
   }, []);
   return (
-    <NavigationContainer>
+    <View style={{flex: 1}}>
       {isLoading ? (
           <ActivityIndicator/>
       ) : (
+        <NavigationContainer>
           <Stack.Navigator screenOptions={{headerShown: false}}>
               <Stack.Screen
                 name="Home"
                 component={Home}
-                initialParams={{locations:{data}}}
+                initialParams={{locations: locationData, curLocation: locationData[0]}}
               />
-              <Stack.Screen name="AlternateLocations" component={AlternateLocations} />
+              <Stack.Screen
+                name="AlternateLocations"
+                component={AlternateLocations}/>
           </Stack.Navigator>
-
+        </NavigationContainer>
       )}
-    </NavigationContainer>
+      </View>
   );
 }

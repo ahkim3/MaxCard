@@ -17,24 +17,26 @@ import {
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const Button = props => {
-  return(
-    <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
-      <LinearGradient
-        colors={['#205072', '#51999E']}
-        style={styles.button}>
-          <Text style={styles.text}>{props.location}</Text>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-}
-
-export function AlternateLocations({navigation, locations}) {
+export function AlternateLocations({navigation, route}) {
+  const {locations} = route.params;
+  const alternateLocations = JSON.parse(JSON.stringify(locations));
+  alternateLocations.shift();
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
-  console.log(JSON.stringify(locations, null, 2));
   if(!fontsLoaded) {
     return;
   } else {
+    const buttons = alternateLocations.map(item => 
+      <TouchableOpacity style={styles.buttonContainer}
+        onPress={() =>
+          navigation.navigate('Home', {locations: locations, curLocation: item})
+      }>
+        <LinearGradient
+          colors={['#205072', '#51999E']}
+          style={styles.button}>
+            <Text style={styles.text}>{item.name}</Text>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
     return (
       <LinearGradient
         colors={['#2C506F', 'black']}
@@ -45,11 +47,7 @@ export function AlternateLocations({navigation, locations}) {
             style={styles.logo}
         />
         <Text style={styles.title}>Alternate Locations:</Text>
-        <Button location='location 1'/>
-        <Button location='location 2'/>
-        <Button location='location 3'/>
-        <Button location='location 4'/>
-        <Button location='location 5'/>
+        {buttons}
         <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
           <LinearGradient
             colors={['#51999E', '#7BE495']}
@@ -80,10 +78,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Jost_500Medium',
-    fontSize: 16,
+    fontSize: 14,
     letterSpacing: 4,
     color: 'white',
-    borderRadius: 30
+    margin: 5,
+    borderRadius: 30,
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
   title: {
     fontFamily: 'Jost_700Bold',
