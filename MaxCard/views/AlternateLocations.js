@@ -7,7 +7,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { NavBar } from "./Home";
+import { NavBar, Button, BackgroundLogo } from "./Home";
 import {
   useFonts,
   Jost_500Medium,
@@ -26,26 +26,15 @@ export function AlternateLocations({navigation, route}) {
     return;
   } else {
     const buttons = alternateLocations.map(item => 
-      <TouchableOpacity style={styles.buttonContainer}
-        onPress={() =>
-          navigation.navigate('Home', {locations: locations, curLocation: item})
-      }>
-        <LinearGradient
-          colors={['#205072', '#51999E']}
-          style={styles.button}>
-            <Text style={styles.text}>{item.name}</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+      <Button title={item.name} onpress={() =>
+        navigation.navigate('Home', {locations: locations, curLocation: item})
+      }/>
     );
     return (
       <LinearGradient
         colors={['#2C506F', 'black']}
         style={styles.background}>
-        <Image
-            source={require("./../assets/logo-bg.png")}
-            resizeMode="contain"
-            style={styles.logo}
-        />
+        <BackgroundLogo/>
         <Text style={styles.title}>Alternate Locations:</Text>
         {buttons}
         <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
@@ -71,10 +60,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     rowGap: 25,
-  },
-  logo: {
-    position: 'absolute',
-    top: 0
   },
   text: {
     fontFamily: 'Jost_500Medium',

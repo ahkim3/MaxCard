@@ -42,7 +42,7 @@ export default function App() {
   return (
     <View style={{flex: 1}}>
       {isLoading ? (
-          <ActivityIndicator/>
+          <LoadingScreen/>
       ) : (
         <NavigationContainer>
           <Stack.Navigator screenOptions={{headerShown: false}}>
