@@ -245,8 +245,6 @@ def nearest_locations(latitude, longitude):
     if not (latitude or longitude):
         return None
 
-
-
     nearby_locations = []
 
     gmaps = googlemaps.Client(key=get_google_api_key())
@@ -290,7 +288,7 @@ def nearest_locations(latitude, longitude):
                 # Get the reference of the first photo
                 photo_reference = place['photos'][0]['photo_reference']
                 # Construct the photo URL using the reference
-                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
 
                 # Resolve photo URL
                 photo_url = get_resolved_url(unsanitized_photo_url)
