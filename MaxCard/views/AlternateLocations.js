@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -18,9 +19,23 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export function AlternateLocations({navigation, route}) {
-  const {locations} = route.params;
-  const alternateLocations = JSON.parse(JSON.stringify(locations));
-  alternateLocations.shift();
+  const {locations, curLocation} = route.params;
+  // const alternateLocations = JSON.parse(JSON.stringify(locations));
+  // alternateLocations.shift();
+
+
+  const [alternateLocations, setAlternateLocations] = useState([]);
+
+  const handleFilter = () => {
+    const filtered = locations.filter(item => item != curLocation);
+    setAlternateLocations(filtered);
+  };
+
+  useEffect(() => {
+    handleFilter();
+  }, []);
+
+  
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;

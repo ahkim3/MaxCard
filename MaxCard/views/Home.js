@@ -98,7 +98,7 @@ export const Home = ({route, navigation}) => {
           />
         </View>
         <Button title={"I'M NOT HERE"} onpress={() =>
-          navigation.navigate('AlternateLocations', {locations: locations})}/>
+          navigation.navigate('AlternateLocations', {locations: locations, curLocation: curLocation})}/>
         <View style={{position: 'absolute', top: screenHeight}}>
           <NavBar navigation={navigation}/>
         </View>
@@ -137,16 +137,16 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 5,
     marginHorizontal: 28,
-    alignSelf: 'left',
+    alignSelf: 'flex-start',
   },
   subtext: {
-    fontFamily: 'Jost_500Bold',
+    fontFamily: 'Jost_500Medium',
     fontSize: 24,
     letterSpacing: 4,
     color: 'white',
     padding: 5,
-    alignSelf: 'left',
-    marginHorizontal: 28
+    marginHorizontal: 28,
+    alignSelf: 'flex-start',
   },
   card: {
     width: (85 / 100) * screenWidth,

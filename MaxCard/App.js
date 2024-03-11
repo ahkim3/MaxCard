@@ -36,9 +36,11 @@ export default function App() {
           console.log("done loading");
       }
   };
+
   useEffect(() => {
     GetLocations();
   }, []);
+  
   return (
     <View style={{flex: 1}}>
       {isLoading ? (
