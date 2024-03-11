@@ -1,9 +1,11 @@
 import boto3
+from botocore.exceptions import ClientError
 from decimal import Decimal
 import googlemaps
 from math import radians, sin, cos, sqrt, atan2
 import os
 import requests
+import json
 
 # List of functions:
 # get_cards()
@@ -12,6 +14,32 @@ import requests
 # get_user_cards(user_id)
 
 REGION_NAME = 'us-east-1'
+
+
+def get_google_api_key():
+
+    secret_name = "googlemapsapikey"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        # For a list of exceptions thrown, see
+        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        raise e
+
+    secret = json.loads(get_secret_value_response['SecretString'])
+    return secret['googlemapskey']
+
 
 class Card:
     def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_id:int, card_specials:dict):
@@ -207,19 +235,19 @@ def get_resolved_url(url):
 
 # takes the coordinates and returns the nearest locations
 def nearest_locations(latitude, longitude):
+
+
+    # Use this code snippet in your app.
+# If you need more information about configurations
+# or implementing the sample code, visit the AWS docs:
+# https://aws.amazon.com/developer/language/python/
+
     if not (latitude or longitude):
         return None
 
-    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
-    GOOGLE_MAPS_API_KEY = 'AIzaSyArxFwoVKFHgai2pEUjEQkojsnEdJRKXko'
-
-    # Check if the API key is set
-    if not GOOGLE_MAPS_API_KEY:
-        raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
-
     nearby_locations = []
 
-    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+    gmaps = googlemaps.Client(key=get_google_api_key())
 
     location = (latitude, longitude)
     max_results = 10
@@ -260,7 +288,7 @@ def nearest_locations(latitude, longitude):
                 # Get the reference of the first photo
                 photo_reference = place['photos'][0]['photo_reference']
                 # Construct the photo URL using the reference
-                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
 
                 # Resolve photo URL
                 photo_url = get_resolved_url(unsanitized_photo_url)
