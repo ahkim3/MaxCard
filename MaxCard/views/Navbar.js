@@ -13,8 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-export const NavBar = () => {
+const NavBar = () => {
+
   const navigation = useNavigation();
+
   return (
     <View style={styles.navContainer}>
       <View style={styles.nav}>
@@ -27,7 +29,7 @@ export const NavBar = () => {
 
         <TouchableOpacity
           style={styles.navItems}
-          onPress={() => navigation.navigate("Wallet")}
+          onPress={console.log("Wallet button pressed!")}
         >
           <Image
             source={require("./../assets/wallet.png")}
@@ -49,39 +51,7 @@ export const NavBar = () => {
       </View>
     </View>
   );
-}
-
-const Home = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-      <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
-        <Image 
-            source={require("./../assets/logo_alternate.png")} 
-            resizeMode="contain" 
-            style={styles.logo}
-        />
-        <Text style={styles.text}>Best Card For: </Text>
-        <Text style={styles.text}>Potential Energy Cafe</Text>
-      </LinearGradient>
-      <View style={styles.cardContainer}>
-        <Image
-          source={require("./../assets/card.png")}
-          style={styles.card}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="I'M NOT HERE"
-          onPress={()=> navigation.navigate('AlternateLocations')}
-          style={styles.button}
-          color={"white"}
-        />
-      </View>
-      <NavBar/>
-    </View>
-  );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -159,13 +129,13 @@ const styles = StyleSheet.create({
     marginTop: 0.03 * screenHeight,
   },
   logo: {
-    position:"absolute",
+    position: "absolute",
     top: -0.22 * screenHeight,
     left: 0.3 * screenWidth,
     height: 0.8 * screenHeight,
     width: 0.8 * screenWidth,
-    zIndex: 1, 
-  }
+    zIndex: 1,
+  },
 });
 
-export default Home;
+export default NavBar;
