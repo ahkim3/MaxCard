@@ -20,28 +20,23 @@ const screenWidth = Dimensions.get('window').width;
 
 export function AlternateLocations({navigation, route}) {
   const {locations, curLocation} = route.params;
-  // const alternateLocations = JSON.parse(JSON.stringify(locations));
-  // alternateLocations.shift();
-
-
   const [alternateLocations, setAlternateLocations] = useState([]);
 
+  // Only display the locations that are not the one selected on Home page
   const handleFilter = () => {
     const filtered = locations.filter(item => item != curLocation);
     setAlternateLocations(filtered);
   };
-
   useEffect(() => {
     handleFilter();
   }, []);
-
   
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;
   } else {
-    const buttons = alternateLocations.map(item => 
-      <Button title={item.name} onpress={() =>
+    const buttons = alternateLocations.map((item, i) => 
+      <Button key={i} title={item.name} onpress={() =>
         navigation.navigate('Home', {locations: locations, curLocation: item})
       }/>
     );
