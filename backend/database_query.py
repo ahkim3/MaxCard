@@ -42,11 +42,12 @@ def get_google_api_key():
 
 
 class Card:
-    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_id:int, card_specials:dict):
+    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_type:str, card_id:int, card_specials:dict):
         self.card_name      = card_name
         self.card_categories= card_categories
         self.card_base      = card_base
         self.card_company   = card_company
+        self.card_type      = card_type
         self.card_id        = card_id
         self.card_specials  = card_specials
 
@@ -57,12 +58,13 @@ class Card:
             'card_categories': self.card_categories,
             'card_base': self.card_base,
             'card_company': self.card_company,
+            'card_type' : self.card_type,
             'card_id': self.card_id,
             'card_specials': self.card_specials
         }
 
     def __repr__(self):
-        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
+        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials})"
 
 class User:
     def __init__(self, user_id, user_cards, user_name):

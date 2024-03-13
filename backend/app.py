@@ -56,14 +56,15 @@ def add_card():
     card_base = request.form.get("card_base")
     card_categories = request.form.get("card_categories")
     card_company = request.form.get("card_company")
+    card_type = request.form.get("card_type")
     card_name = request.form.get("card_name")
     card_specials = request.form.get("card_specials")
 
     # Check if any of the required parameters are missing
-    if not all([card_base, card_categories, card_company, card_name, card_specials]):
+    if not all([card_base, card_categories, card_company, card_type, card_name, card_specials]):
         return jsonify({"error": "Missing required parameters"}), 400
 
-    if (database_service.create_card(card_base, card_categories, card_company, card_name, card_specials) == True):
+    if (database_service.create_card(card_base, card_categories, card_company, card_type, card_name, card_specials) == True):
         # Return a success response if everything went well
         return jsonify({"message": "Card added successfully"}), 200
     else: 
