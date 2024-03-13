@@ -6,6 +6,7 @@ import { Home }  from './views/Home';
 import { AlternateLocations } from "./views/AlternateLocations";
 import { LoadingScreen } from "./views/LoadingScreen";
 import * as Location from 'expo-location';
+import Wallet from './views/Wallet';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,7 +65,12 @@ export default function App() {
               />
               <Stack.Screen
                 name="AlternateLocations"
-                component={AlternateLocations}/>
+                component={AlternateLocations}
+              />
+              <Stack.Screen
+                name="Wallet"
+                component={Wallet}
+              />
           </Stack.Navigator>
         </NavigationContainer>
       )}
