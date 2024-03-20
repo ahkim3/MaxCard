@@ -14,6 +14,8 @@ import {
   Jost_500Medium,
   Jost_700Bold
 } from '@expo-google-fonts/jost';
+import GetLocationData from '../RetrieveData';
+import { LoadingScreen } from './LoadingScreen';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -21,6 +23,17 @@ const screenWidth = Dimensions.get('window').width;
 export function AlternateLocations({navigation, route}) {
   const {locations, curLocation} = route.params;
   const [alternateLocations, setAlternateLocations] = useState([]);
+  const [showLoading, setShowLoading] = useState([]);
+
+  useEffect(() => {
+    setShowLoading(false);
+  }, []);
+
+  // TODO: fix warning about setstate from outside component
+  const retryData = GetLocationData();
+  const isLoading = retryData[0];
+  const retryLocationData = retryData[1];
+  const retryErrorMsg = retryData[2];
 
   // Only display the locations that are not the one selected on Home page
   const handleFilter = () => {
@@ -40,25 +53,41 @@ export function AlternateLocations({navigation, route}) {
         navigation.navigate('Home', {locations: locations, curLocation: item})
       }/>
     );
-    return (
-      <LinearGradient
-        colors={['#2C506F', 'black']}
-        style={styles.background}>
-        <BackgroundLogo/>
-        <Text style={styles.title}>Alternate Locations:</Text>
-        {buttons}
-        <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
-          <LinearGradient
-            colors={['#51999E', '#7BE495']}
-            style={styles.button}>
-              <Text style={styles.text}>Retry</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <View style={{position: 'absolute', top: screenHeight}}>
-          <NavBar navigation={navigation}/>
-        </View>
-      </LinearGradient>
-    );
+
+    console.log("showLoadgin: " + showLoading + "\nisLoading: " + isLoading);
+
+    if(showLoading && isLoading) {
+      return <LoadingScreen/>;
+    }
+    else if(showLoading && !isLoading) {
+      console.log("now go to home");
+      navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]});
+      return;
+    }
+    else {
+      return (
+        <LinearGradient
+          colors={['#2C506F', 'black']}
+          style={styles.background}>
+          <BackgroundLogo/>
+          <Text style={styles.title}>Alternate Locations:</Text>
+          {buttons}
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => 
+            {isLoading ? (
+              setShowLoading(true)
+            ) : navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]})}}>
+            <LinearGradient
+              colors={['#51999E', '#7BE495']}
+              style={styles.button}>
+                <Text style={styles.text}>Retry</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <View style={{position: 'absolute', top: screenHeight}}>
+            <NavBar navigation={navigation}/>
+          </View>
+        </LinearGradient>
+      );
+    }
   }
 }
 
