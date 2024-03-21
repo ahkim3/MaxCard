@@ -60,7 +60,6 @@ export function AlternateLocations({navigation, route}) {
       return <LoadingScreen/>;
     }
     else if(showLoading && !isLoading) {
-      console.log("now go to home");
       navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]});
       return;
     }
