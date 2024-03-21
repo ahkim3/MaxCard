@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   image: {
-    alignSelf: 'left'
+    alignSelf: 'flex-start'
   },
   signinbtn: {
     height: 44,
