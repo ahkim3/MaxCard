@@ -5,6 +5,7 @@ import { AlternateLocations } from "./views/AlternateLocations";
 import { LoadingScreen } from "./views/LoadingScreen";
 import Wallet from './views/Wallet';
 import { SignInSplash } from './views/SignInSplash';
+import { Settings } from './views/Settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,10 @@ export default function App() {
       <Stack.Screen
         name="Wallet"
         component={Wallet}
+      />
+      <Stack.Screen
+        name = "Settings"
+        component = {Settings}
       />
       </Stack.Navigator>
     </NavigationContainer>

@@ -43,7 +43,7 @@ export const NavBar = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.navItems}
-          onPress={console.log("Settings button pressed!")}
+          onPress={() => navigation.navigate("Settings")}
         >
           <Image
             source={require("./../assets/settings.png")}
