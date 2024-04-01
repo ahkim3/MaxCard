@@ -5,11 +5,11 @@ You must be using python.
 Install the python dependencies:
 
 ```console
-pip install -r requirements.txt
+pip install -r carrdloader/requirements.txt
 ```
 or
 ```console
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r carrdloader/requirements.txt
 ```
 install the aws cli
 
