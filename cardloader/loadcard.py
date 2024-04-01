@@ -78,6 +78,8 @@ class CreditCardApp:
         cashback_entry.config(validate="key", validatecommand=(self.root.register(self.validate_float), "%P"))
         
         self.categories.append((category_label, cashback_entry))
+
+        self.update_window_size()
         
     def add_special_row(self):
         # Create a new row for a special merchant
@@ -90,6 +92,8 @@ class CreditCardApp:
         cashback_entry.config(validate="key", validatecommand=(self.root.register(self.validate_float), "%P"))
         
         self.special_merchants.append((merchant_entry, cashback_entry))
+
+        self.update_window_size()
         
     def validate_float(self, new_value):
         try:
@@ -178,7 +182,12 @@ class CreditCardApp:
         popup.geometry("200x100")
         tk.Label(popup, text="Upload Successful!").pack(pady=20)
         tk.Button(popup, text="OK", command=popup.destroy).pack()
-        
+
+    def update_window_size(self):
+        self.root.update_idletasks()  # Update widget sizes
+        width = max(self.root.winfo_reqwidth(), 400)  # Set minimum width
+        height = max(self.root.winfo_reqheight(), 300)  # Set minimum height
+        self.root.geometry("{}x{}".format(width, height))
 
 if __name__ == "__main__":
     root = tk.Tk()
