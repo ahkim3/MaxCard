@@ -37,6 +37,13 @@ const Spin = () => {
   );
 };
 
+const GoHome = ({navigation, locationData}) => {
+  useEffect(() => {
+    navigation.navigate('Home', {locations: locationData, curLocation: locationData[0]});
+  }, []);
+  return;
+};
+
 export function LoadingScreen({navigation}) {
   const data = GetLocationData();
   const isLoading = data[0];
@@ -46,7 +53,7 @@ export function LoadingScreen({navigation}) {
   let [fontsLoaded] = useFonts({Jost_500Medium,});
   if(!fontsLoaded) {
     return;
-  } else if(isLoading){
+  } else if(isLoading) {
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -61,8 +68,9 @@ export function LoadingScreen({navigation}) {
       </View>
     );
   } else {
-    navigation.navigate('Home', {locations: locationData, curLocation: locationData[0]});
-    return;
+    return (
+      <GoHome navigation={navigation} locationData={locationData}/>
+    );
   }
 }
 
