@@ -258,16 +258,8 @@ def nearest_locations(latitude, longitude):
 
     places_result = gmaps.places_nearby(
         location=location,
-        radius=None,
-        keyword=None,
-        language=None,
-        min_price=None,
-        max_price=None,
-        name=None,
-        open_now=False,
         rank_by=how_to_rank,
-        type=valid_types,
-        page_token=None
+        type='establishment',
     )
 
     results = places_result['results'][:max_results]
@@ -286,17 +278,17 @@ def nearest_locations(latitude, longitude):
             }
 
             # Check if the place has photos
-            if 'photos' in place:
-                # Get the reference of the first photo
-                photo_reference = place['photos'][0]['photo_reference']
-                # Construct the photo URL using the reference
-                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
+            # if 'photos' in place:
+            #     # Get the reference of the first photo
+            #     photo_reference = place['photos'][0]['photo_reference']
+            #     # Construct the photo URL using the reference
+            #     unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
 
-                # Resolve photo URL
-                photo_url = get_resolved_url(unsanitized_photo_url)
+            #     # Resolve photo URL
+            #     photo_url = get_resolved_url(unsanitized_photo_url)
 
-                # Add the photo URL to the location information
-                location_info['photo_url'] = photo_url
+            #     # Add the photo URL to the location information
+            #     location_info['photo_url'] = photo_url
 
             nearby_locations.append(location_info)
     return nearby_locations
