@@ -31,11 +31,14 @@
     "plugins": [
       [
         "expo-font",
-        "@react-native-google-signin/google-signin",
         ["expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
-        }]
+        }],
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
+        }
       ]
     ],
     "extra": {
