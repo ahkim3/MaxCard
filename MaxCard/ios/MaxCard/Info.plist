@@ -89,5 +89,16 @@
 		<string>Jost-Thin.ttf</string>
 		<string>Jost-ThinItalic.ttf</string>
 	</array>
+	<key>GIDClientID</key>
+	<string>577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>com.googleusercontent.apps.n6caerk6ih3ccpl1dc66p20u5672kotp-755780334775</string>
+		</array>
+	</dict>
+</array>
 </dict>
 </plist>

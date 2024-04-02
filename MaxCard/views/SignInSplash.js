@@ -4,11 +4,37 @@ import {
   useFonts,
   Jost_700Bold
 } from '@expo-google-fonts/jost';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export function SignInSplash({navigation}) {
+
+  //Set up Google sign in
+  GoogleSignin.configure();
+  signIn = async() => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      setState({ userInfo });
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // TODO
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // TODO
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // TODO
+      } else {
+        // TODO
+      }
+    }
+  };
+  
   let [fontsLoaded] = useFonts({Jost_700Bold,});
   if(!fontsLoaded) {
     return;
@@ -25,10 +51,11 @@ export function SignInSplash({navigation}) {
           />
           <Text style={styles.text}>maxcard</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Loading")}>
-            <Image
-              source={require("./../assets/signin-btn.png")}
-              resizeMode="contain"
-              style={styles.signinbtn}
+            <GoogleSigninButton
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Light}
+              onPress={this._signIn}
+              disabled={this.state.isSignInProgress}
             />
           </TouchableOpacity>
         </LinearGradient>
