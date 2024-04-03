@@ -29,17 +29,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      [
-        "expo-font",
-        ["expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
-        }],
-        ["@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
-        }]
-      ]
+      "expo-font",
+      ["expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+      }],
+      ["@react-native-google-signin/google-signin",
+      {
+        "iosUrlScheme": "com.googleusercontent.apps.com.googleusercontent.apps.577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n"
+      }]
     ],
     "extra": {
       "eas": {
