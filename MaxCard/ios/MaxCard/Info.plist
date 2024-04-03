@@ -74,5 +74,16 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>GIDClientID</key>
+	<string>577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

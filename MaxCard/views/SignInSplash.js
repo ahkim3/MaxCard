@@ -16,7 +16,7 @@ const screenWidth = Dimensions.get('window').width;
 export function SignInSplash({navigation}) {
 
   //Set up Google sign in
-  GoogleSignin.configure();
+  GoogleSignin.configure({iosClientId: "577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n.apps.googleusercontent.com"});
   signIn = async() => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -55,7 +55,6 @@ export function SignInSplash({navigation}) {
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Light}
               onPress={this._signIn}
-              disabled={this.state.isSignInProgress}
             />
           </TouchableOpacity>
         </LinearGradient>
