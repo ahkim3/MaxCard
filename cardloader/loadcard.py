@@ -71,7 +71,7 @@ class CreditCardApp:
         self.current_category_row += 1
         category_label = ttk.Combobox(self.category_frame, state="readonly")
         category_label.grid(row=self.current_category_row, column=0, padx=5, pady=5)
-        category_label['values'] = ['restaurant', 'drugstore', 'lodging', 'gas_station', 'grocery_or_supermarket', 'wholesale','coffee_shop', 'hotel','gym', 'transit_station']  # Placeholder values
+        category_label['values'] = ['NO CATEGORIES','restaurant', 'drugstore', 'lodging', 'gas_station', 'grocery_or_supermarket', 'wholesale','coffee_shop', 'hotel','gym', 'transit_station']  # Placeholder values
         
         cashback_entry = tk.Entry(self.category_frame)
         cashback_entry.grid(row=self.current_category_row, column=1, padx=5, pady=5)
@@ -114,20 +114,22 @@ class CreditCardApp:
         try:
             if card_name == '' or card_company == '' or cashback == '':
                 raise
-            category  = []
+            category = []
             for cat in category_data:
+                if cat[0] == 'NO CATEGORIES':
+                    continue
                 if cat[0] == '':
                     continue
                 if cat[1] == '':
                     raise
-            category.append({cat[0]:float(cat[1])})            
-            specials  = []
+                category.append({cat[0]: float(cat[1])})
+            specials = []
             for special in merchant_data:
                 if special[0] == '':
                     continue
                 if special[1] == '':
                     raise
-                specials.append({special[0]:float(special[1])})
+                specials.append({special[0]: float(special[1])})
         except:
             # Display a popup on error
             popup = tk.Toplevel(self.root)
@@ -164,6 +166,12 @@ class CreditCardApp:
             tk.Button(popup, text="OK", command=popup.destroy).pack()
             return
     
+        # Clear additional category dropdown boxes
+        for category in self.categories[1:]:
+            category[0].grid_forget()
+            category[1].grid_forget()
+        del self.categories[1:]
+
         # Clear the data
         self.card_name_entry.delete(0, tk.END)
         self.card_company_entry.delete(0, tk.END)
@@ -175,13 +183,14 @@ class CreditCardApp:
         for merchant in self.special_merchants:
             merchant[0].delete(0, tk.END)
             merchant[1].delete(0, tk.END)
-        
+
         # Display a popup for success
         popup = tk.Toplevel(self.root)
         popup.title("Upload Successful")
         popup.geometry("200x100")
         tk.Label(popup, text="Upload Successful!").pack(pady=20)
         tk.Button(popup, text="OK", command=popup.destroy).pack()
+
 
     def update_window_size(self):
         self.root.update_idletasks()  # Update widget sizes
