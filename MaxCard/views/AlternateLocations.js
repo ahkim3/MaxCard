@@ -1,59 +1,92 @@
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { NavBar } from "./Home";
+import { NavBar, Button, BackgroundLogo } from "./Home";
 import {
   useFonts,
   Jost_500Medium,
   Jost_700Bold
 } from '@expo-google-fonts/jost';
+import GetLocationData from '../RetrieveData';
+import { LoadingScreen } from './LoadingScreen';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const Button = props => {
-  return(
-    <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
-      <LinearGradient
-        colors={['#205072', '#51999E']}
-        style={styles.button}>
-          <Text style={styles.text}>{props.location}</Text>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-}
+export function AlternateLocations({navigation, route}) {
+  const {locations, curLocation} = route.params;
+  const [alternateLocations, setAlternateLocations] = useState([]);
+  const [showLoading, setShowLoading] = useState([]);
 
-export function AlternateLocations() {
+  useEffect(() => {
+    setShowLoading(false);
+  }, []);
+
+  // TODO: fix warning about setstate from outside component
+  const retryData = GetLocationData();
+  const isLoading = retryData[0];
+  const retryLocationData = retryData[1];
+  const retryErrorMsg = retryData[2];
+
+  // Only display the locations that are not the one selected on Home page
+  const handleFilter = () => {
+    const filtered = locations.filter(item => item != curLocation);
+    setAlternateLocations(filtered);
+  };
+  useEffect(() => {
+    handleFilter();
+  }, []);
+  
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;
   } else {
-    return (
-      <LinearGradient
-        colors={['#2C506F', 'black']}
-        style={styles.background}>
-        <Image
-            source={require("./../assets/logo-bg.png")}
-            resizeMode="contain"
-            style={styles.logo}
-        />
-        <Text style={styles.title}>Alternate Locations:</Text>
-        <Button location='location 1'/>
-        <Button location='location 2'/>
-        <Button location='location 3'/>
-        <Button location='location 4'/>
-        <Button location='location 5'/>
-        <TouchableOpacity style={styles.buttonContainer} onPress={console.log("Button pressed")}>
-          <LinearGradient
-            colors={['#51999E', '#7BE495']}
-            style={styles.button}>
-              <Text style={styles.text}>Retry</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <View style={{position: 'absolute', top: screenHeight}}>
-          <NavBar/>
-        </View>
-      </LinearGradient>
+    const buttons = alternateLocations.map((item, i) => 
+      <Button key={i} title={item.name} onpress={() =>
+        navigation.navigate('Home', {locations: locations, curLocation: item})
+      }/>
     );
+
+    console.log("showLoadgin: " + showLoading + "\nisLoading: " + isLoading);
+
+    if(showLoading && isLoading) {
+      return <LoadingScreen/>;
+    }
+    else if(showLoading && !isLoading) {
+      navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]});
+      return;
+    }
+    else {
+      return (
+        <LinearGradient
+          colors={['#2C506F', 'black']}
+          style={styles.background}>
+          <BackgroundLogo/>
+          <Text style={styles.title}>Alternate Locations:</Text>
+          {buttons}
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => 
+            {isLoading ? (
+              setShowLoading(true)
+            ) : navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]})}}>
+            <LinearGradient
+              colors={['#51999E', '#7BE495']}
+              style={styles.button}>
+                <Text style={styles.text}>Retry</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <View style={{position: 'absolute', top: screenHeight}}>
+            <NavBar navigation={navigation}/>
+          </View>
+        </LinearGradient>
+      );
+    }
   }
 }
 
@@ -66,16 +99,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     rowGap: 25,
   },
-  logo: {
-    position: 'absolute',
-    top: 0
-  },
   text: {
     fontFamily: 'Jost_500Medium',
-    fontSize: 16,
+    fontSize: 14,
     letterSpacing: 4,
     color: 'white',
-    borderRadius: 30
+    margin: 5,
+    borderRadius: 30,
+    textAlign: 'center',
+    textAlignVertical: 'center'
   },
   title: {
     fontFamily: 'Jost_700Bold',

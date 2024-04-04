@@ -1,9 +1,11 @@
 import boto3
+from botocore.exceptions import ClientError
 from decimal import Decimal
 import googlemaps
 from math import radians, sin, cos, sqrt, atan2
 import os
 import requests
+import json
 
 # List of functions:
 # get_cards()
@@ -13,14 +15,42 @@ import requests
 
 REGION_NAME = 'us-east-1'
 
+
+def get_google_api_key():
+
+    secret_name = "googlemapsapikey"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        # For a list of exceptions thrown, see
+        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        raise e
+
+    secret = json.loads(get_secret_value_response['SecretString'])
+    return secret['googlemapskey']
+
+
 class Card:
-    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_id:int, card_specials:dict):
+    def __init__(self, card_name: str = "", card_categories:dict = {}, card_base:float = 0.0, card_company:str = "", card_type:str = "", card_id:int = 0, card_specials:dict = {}, image_url: str = ""):
         self.card_name      = card_name
         self.card_categories= card_categories
         self.card_base      = card_base
         self.card_company   = card_company
+        self.card_type      = card_type
         self.card_id        = card_id
         self.card_specials  = card_specials
+        self.image_url      = image_url
 
     # for jsonify purposes
     def to_dict(self):
@@ -29,12 +59,14 @@ class Card:
             'card_categories': self.card_categories,
             'card_base': self.card_base,
             'card_company': self.card_company,
+            'card_type' : self.card_type,
             'card_id': self.card_id,
-            'card_specials': self.card_specials
+            'card_specials': self.card_specials,
+            'image_url': self.image_url
         }
 
     def __repr__(self):
-        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_id={self.card_id}, card_specials={self.card_specials})"
+        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials}), image_url={self.image_url}"
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -208,19 +240,22 @@ def get_resolved_url(url):
 # takes the coordinates and returns locations (1 prominent location if it exists, followed by closest locations)
 def nearest_locations(latitude, longitude):
     GET_PHOTOS = False
+    DEBUG = False
 
     if not (latitude or longitude):
         return None
 
-    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
-
-    # Check if the API key is set
-    if not GOOGLE_MAPS_API_KEY:
-        raise ValueError("Google Maps API key is not set. Please set the GOOGLE_MAPS_API_KEY environment variable.")
+    # If running locally, use the environment variable
+    if (DEBUG):
+        try:
+            GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+        except KeyError:
+            print("Error: GOOGLE_MAPS_API_KEY not set")
+            return None
 
     nearby_locations = []
 
-    gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+    gmaps = googlemaps.Client(key=get_google_api_key())
 
     location = (latitude, longitude)
     max_results = 1
@@ -313,11 +348,11 @@ def nearest_locations(latitude, longitude):
                 # Construct the photo URL using the reference
                 unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
 
-                # Resolve photo URL
-                photo_url = get_resolved_url(unsanitized_photo_url)
+            #     # Resolve photo URL
+            #     photo_url = get_resolved_url(unsanitized_photo_url)
 
-                # Add the photo URL to the location information
-                location_info['photo_url'] = photo_url
+            #     # Add the photo URL to the location information
+            #     location_info['photo_url'] = photo_url
 
             nearby_locations.append(location_info)
     return nearby_locations

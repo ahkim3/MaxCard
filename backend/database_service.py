@@ -2,7 +2,7 @@ import boto3
 from decimal import Decimal
 
 # List of functions:
-# create_card(card_base, card_categories, card_company, card_name, card_specials)
+# create_card(card_base, card_categories, card_company, card_type, card_name, card_specials)
 # delete_card(primary_key_value)
 # create_user(user_cards, user_name)
 # delete_user(primary_key_value)
@@ -42,7 +42,7 @@ def delete_dynamodb_item(table_name, primary_key_value):
         print(f"Error deleting item: {str(e)}")
         return False
 
-def create_card(card_base, card_categories, card_company, card_name, card_specials):
+def create_card(card_base, card_categories, card_company, card_type, card_name, card_specials):
     """
     Create a new card in DynamoDB with an automatically incremented card_id.
 
@@ -50,6 +50,7 @@ def create_card(card_base, card_categories, card_company, card_name, card_specia
     - card_base (int): The base value for the card.
     - card_categories (list): List of dictionaries representing card categories.
     - card_company (str): The company associated with the card.
+    - card_type (str) : optional? the type like Visa, Mastercard, American Express, Discover
     - card_name (str): The name of the card.
     - card_specials (list): List of dictionaries representing card specials.
 
@@ -73,6 +74,7 @@ def create_card(card_base, card_categories, card_company, card_name, card_specia
             'card_base': card_base,
             'card_categories': card_categories,
             'card_company': card_company,
+            'card_type' : card_type,
             'card_name': card_name,
             'card_specials': card_specials
         }
@@ -224,7 +226,7 @@ def delete_card_from_user(user_id, card_id):
 ## Examples ----------------------
 
 ## Delete card example usage:
-# primary_key_value_to_delete = 1
+# primary_key_value_to_delete = 3
 # deleted_successfully = delete_card(primary_key_value_to_delete)
     
 ## Delete user example usage:
@@ -232,12 +234,13 @@ def delete_card_from_user(user_id, card_id):
 # deleted_successfully = delete_user(primary_key_value_to_delete)
 
 ## Add card example usage:
-# card_base_value = 1
-# card_categories_list = [{'grocery': 2}, {'restaurant': 4}, {'gas': 3}]
-# card_company_name = 'Real Bank'
-# card_name_value = 'Real Card'
-# card_specials_list = [{'target': 4}]
-# created_successfully = create_card(card_base_value, card_categories_list, card_company_name, card_name_value, card_specials_list)
+# card_base_value = 10
+# card_categories_list = [{'grocery': 2}, {'restaurant': 15}, {'gas': 3}]
+# card_company_name = 'Citibank'
+# card_type_name = 'Visa'
+# card_name_value = 'Card With a Really High Base Value'
+# card_specials_list = [{'Walmart': 3}]
+# created_successfully = create_card(card_base_value, card_categories_list, card_company_name, card_type_name, card_name_value, card_specials_list)
     
 ## create user example usage:
 # user_cards_list = [0, 1]

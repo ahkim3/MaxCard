@@ -5,6 +5,7 @@ import {
   useFonts,
   Jost_500Medium,
 } from '@expo-google-fonts/jost';
+import GetLocationData from "../RetrieveData";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -36,11 +37,23 @@ const Spin = () => {
   );
 };
 
-export function LoadingScreen() {
+const GoHome = ({navigation, locationData}) => {
+  useEffect(() => {
+    navigation.navigate('Home', {locations: locationData, curLocation: locationData[0]});
+  }, []);
+  return;
+};
+
+export function LoadingScreen({navigation}) {
+  const data = GetLocationData();
+  const isLoading = data[0];
+  const locationData = data[1];
+  const errorMsg = data[2];
+
   let [fontsLoaded] = useFonts({Jost_500Medium,});
   if(!fontsLoaded) {
     return;
-  } else {
+  } else if(isLoading) {
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -53,6 +66,10 @@ export function LoadingScreen() {
           <Text style={styles.text}>Loading...</Text>
         </LinearGradient>
       </View>
+    );
+  } else {
+    return (
+      <GoHome navigation={navigation} locationData={locationData}/>
     );
   }
 }
