@@ -42,7 +42,7 @@ def get_google_api_key():
 
 
 class Card:
-    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_type:str, card_id:int, card_specials:dict):
+    def __init__(self, card_name: str = "", card_categories:dict = {}, card_base:float = 0.0, card_company:str = "", card_type:str = "", card_id:int = 0, card_specials:dict = {}, image_url: str = ""):
         self.card_name      = card_name
         self.card_categories= card_categories
         self.card_base      = card_base
@@ -50,6 +50,7 @@ class Card:
         self.card_type      = card_type
         self.card_id        = card_id
         self.card_specials  = card_specials
+        self.image_url      = image_url
 
     # for jsonify purposes
     def to_dict(self):
@@ -60,11 +61,12 @@ class Card:
             'card_company': self.card_company,
             'card_type' : self.card_type,
             'card_id': self.card_id,
-            'card_specials': self.card_specials
+            'card_specials': self.card_specials,
+            'image_url': self.image_url
         }
 
     def __repr__(self):
-        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials})"
+        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials}), image_url={self.image_url}"
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -285,18 +287,18 @@ def nearest_locations(latitude, longitude):
 
             }
 
-            # Check if the place has photos
-            if 'photos' in place:
-                # Get the reference of the first photo
-                photo_reference = place['photos'][0]['photo_reference']
-                # Construct the photo URL using the reference
-                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
+            # # Check if the place has photos
+            # if 'photos' in place:
+            #     # Get the reference of the first photo
+            #     photo_reference = place['photos'][0]['photo_reference']
+            #     # Construct the photo URL using the reference
+            #     unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
 
-                # Resolve photo URL
-                photo_url = get_resolved_url(unsanitized_photo_url)
+            #     # Resolve photo URL
+            #     photo_url = get_resolved_url(unsanitized_photo_url)
 
-                # Add the photo URL to the location information
-                location_info['photo_url'] = photo_url
+            #     # Add the photo URL to the location information
+            #     location_info['photo_url'] = photo_url
 
             nearby_locations.append(location_info)
     return nearby_locations
