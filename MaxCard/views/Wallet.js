@@ -16,7 +16,7 @@ const screenWidth = Dimensions.get("window").width;
 const Wallet = ({ route }) => {
     const [cards, setCards] = useState([]);
     useEffect(() => {
-       fetch("http://44.220.169.6:5000//view_account_cards?user_id=1")
+       fetch("http://maxcardapp.com:5000//view_account_cards?user_id=1")
        .then(results => results.json())
        .then(data => {
         setCards(data);
