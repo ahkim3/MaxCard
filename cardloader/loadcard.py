@@ -71,7 +71,7 @@ class CreditCardApp:
         self.current_category_row += 1
         category_label = ttk.Combobox(self.category_frame, state="readonly")
         category_label.grid(row=self.current_category_row, column=0, padx=5, pady=5)
-        category_label['values'] = ['','restaurant', 'drugstore', 'lodging', 'gas_station', 'grocery_or_supermarket', 'wholesale','coffee_shop', 'hotel','gym', 'transit_station']  # Placeholder values
+        category_label['values'] = ['NO CATEGORIES','restaurant', 'drugstore', 'lodging', 'gas_station', 'grocery_or_supermarket', 'wholesale','coffee_shop', 'hotel','gym', 'transit_station']  # Placeholder values
         
         cashback_entry = tk.Entry(self.category_frame)
         cashback_entry.grid(row=self.current_category_row, column=1, padx=5, pady=5)
@@ -116,6 +116,8 @@ class CreditCardApp:
                 raise
             category = []
             for cat in category_data:
+                if cat[0] == 'NO CATEGORIES':
+                    continue
                 if cat[0] == '':
                     continue
                 if cat[1] == '':
