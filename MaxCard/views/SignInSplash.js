@@ -16,12 +16,15 @@ const screenWidth = Dimensions.get('window').width;
 export function SignInSplash({navigation}) {
 
   //Set up Google sign in
-  GoogleSignin.configure({iosClientId: "577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n.apps.googleusercontent.com"});
-  signIn = async() => {
+  GoogleSignin.configure({
+    iosClientId: "577433087557-usas1p65rl0udj6jlu9caesbu21re139.apps.googleusercontent.com"
+  });
+
+  _signIn = async() => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      setState({ userInfo });
+      setState({ userInfo, error: undefined });
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // TODO
@@ -50,13 +53,11 @@ export function SignInSplash({navigation}) {
             style={styles.image}
           />
           <Text style={styles.text}>maxcard</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Loading")}>
             <GoogleSigninButton
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Light}
               onPress={this._signIn}
             />
-          </TouchableOpacity>
         </LinearGradient>
       </View>
     );
