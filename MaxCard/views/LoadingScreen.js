@@ -46,6 +46,7 @@ const GoHome = ({navigation, locationData}) => {
 
 export function LoadingScreen({navigation}) {
   const data = GetLocationData();
+  console.log(data);
   const isLoading = data[0];
   const locationData = data[1];
   const errorMsg = data[2];

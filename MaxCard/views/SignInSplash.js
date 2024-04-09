@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   useFonts,
@@ -13,28 +14,82 @@ import {
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
+//Set up Google sign in
+GoogleSignin.configure({
+  iosClientId: "577433087557-usas1p65rl0udj6jlu9caesbu21re139.apps.googleusercontent.com"
+});
+
 export function SignInSplash({navigation}) {
 
-  //Set up Google sign in
-  GoogleSignin.configure({
-    iosClientId: "577433087557-usas1p65rl0udj6jlu9caesbu21re139.apps.googleusercontent.com"
-  });
+  const [error, SetError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState('');
+  const [currentUser, setCurrentUser] = useState('');
+  const [hasPreviousSignIn, setHasPreviousSignIn] = useState('');
+
+  const CheckPreviousSignIn = async () => {
+    const response = GoogleSignin.isSignedIn();
+    setHasPreviousSignIn(response);
+  };
 
   _signIn = async() => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setState({ userInfo, error: undefined });
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // TODO
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // TODO
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // TODO
-      } else {
-        // TODO
+    console.log("signing in...");
+    CheckPreviousSignIn();
+    if (!hasPreviousSignIn) {
+      try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        setState({ userInfo, error: undefined });
+      } catch (error) {
+        switch (error.code) {
+          case statusCodes.SIGN_IN_CANCELLED:
+            console.log("user cancelled login flow");
+            break;
+          case statusCodes.IN_PROGRESS:
+            console.log("sign in already in progress");
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            console.log("play services not available or outdated");
+            break;
+          default:
+          console.log("unknown error occurred during sign in");
+        }
       }
+    }
+    console.log("now getting info");
+    // getCurrentUserInfo();
+    console.log("got current user info");
+    // getCurrentUser();
+    console.log("got current user");
+    navigation.navigate("Loading");
+  };
+
+  const getCurrentUserInfo = async() => {
+    try {
+        const response = await GoogleSignin.signInSilently();
+        setUserInfo(response);
+        console.log(response);
+    } catch ( error ) {
+      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+        // user has not signed in yet
+      } else {
+        // some other error
+      }
+    }
+  };
+
+  const getCurrentUser = async () => {
+    const response = GoogleSignin.getCurrentUser();
+    setCurrentUser(response);
+    console.log(response);
+  };
+
+  const signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      setState({ user: null }); // don't forget to remove user from app state
+    } catch (error) {
+      console.error(error);
     }
   };
   
@@ -53,11 +108,13 @@ export function SignInSplash({navigation}) {
             style={styles.image}
           />
           <Text style={styles.text}>maxcard</Text>
-            <GoogleSigninButton
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.Light}
-              onPress={this._signIn}
-            />
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Light}
+            onPress={() => {
+              this._signIn()
+            }}
+          />
         </LinearGradient>
       </View>
     );
