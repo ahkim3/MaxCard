@@ -27,18 +27,21 @@ export function SignInSplash({navigation}) {
   const [currentUser, setCurrentUser] = useState('');
   const [hasPreviousSignIn, setHasPreviousSignIn] = useState('');
 
-  const CheckPreviousSignIn = async () => {
+  function CheckPreviousSignIn() {
     const response = GoogleSignin.isSignedIn();
     setHasPreviousSignIn(response);
+    return response;
   };
 
   _signIn = async() => {
     console.log("signing in...");
-    CheckPreviousSignIn();
-    if (!hasPreviousSignIn) {
+    const previousSignIn = Boolean(CheckPreviousSignIn());
+    console.log("previous sign in? " + previousSignIn);
+    if (!previousSignIn) {
       try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
+        // console.log(userInfo);
         setState({ userInfo, error: undefined });
       } catch (error) {
         switch (error.code) {
@@ -52,23 +55,20 @@ export function SignInSplash({navigation}) {
             console.log("play services not available or outdated");
             break;
           default:
-          console.log("unknown error occurred during sign in");
+            console.log("unknown error occurred during sign in");
         }
       }
     }
-    console.log("now getting info");
-    // getCurrentUserInfo();
-    console.log("got current user info");
-    // getCurrentUser();
-    console.log("got current user");
-    navigation.navigate("Loading");
+    const user = await getCurrentUserInfo();
+    navigation.navigate("Loading", {userId: user.user.id});
   };
 
-  const getCurrentUserInfo = async() => {
+  async function getCurrentUserInfo() {
     try {
         const response = await GoogleSignin.signInSilently();
         setUserInfo(response);
-        console.log(response);
+        return response;
+        // console.log(response);
     } catch ( error ) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         // user has not signed in yet
@@ -76,12 +76,6 @@ export function SignInSplash({navigation}) {
         // some other error
       }
     }
-  };
-
-  const getCurrentUser = async () => {
-    const response = GoogleSignin.getCurrentUser();
-    setCurrentUser(response);
-    console.log(response);
   };
 
   const signOut = async () => {
