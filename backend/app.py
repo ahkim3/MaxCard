@@ -53,13 +53,22 @@ def get_card_id():
 @app.route("/add_card", methods=['POST'])
 def add_card():
     # Get the form data from the request
-    card_base = request.form.get("card_base")
-    card_categories = request.form.get("card_categories")
-    card_company = request.form.get("card_company")
-    card_type = request.form.get("card_type")
-    card_name = request.form.get("card_name")
-    card_specials = request.form.get("card_specials")
+    if request.is_json:
+        data = request.get_json()
+        card_base = data.get("card_base")
+        card_categories = data.get("card_categories")
+        card_company = data.get("card_company")
+        card_type = data.get("card_type")
+        card_name = data.get("card_name")
+        card_specials = data.get("card_specials")
 
+    else:
+        card_base = request.form.get("card_base")
+        card_categories = request.form.get("card_categories")
+        card_company = request.form.get("card_company")
+        card_type = request.form.get("card_type")
+        card_name = request.form.get("card_name")
+        card_specials = request.form.get("card_specials")
     # Check if any of the required parameters are missing
     if not all([card_base, card_categories, card_company, card_type, card_name, card_specials]):
         return jsonify({"error": "Missing required parameters"}), 400
@@ -74,7 +83,11 @@ def add_card():
 @app.route("/remove_card", methods=['DELETE'])
 def remove_card():
     # Extract the card_id parameter from the request data
-    card_id = request.args.get("card_id")
+    if request.is_json:
+        data = request.get_json()
+        card_id = data.get("card_id")
+    else:
+        card_id = request.args.get("card_id")
 
     # Check if the card_id parameter is missing
     if not card_id:
@@ -86,30 +99,67 @@ def remove_card():
     else: 
         return jsonify({"error": "Could not delete card with id of {card_id}"}), 400
 
-# add a new user, user_id is automatically assigned
-@app.route("/add_user", methods=['POST'])
+# add a new user **WITH USER ID!!**
+# example: http://44.220.169.6:5000//add_user?user_id=4132024&user_name=test_man&user_cards=1&user_cards=2&user_cards=3
+@app.route("/add_user", methods=['POST', 'GET'])
 def add_user():
     # Extract the user_cards and user_name parameters from the request data
-    user_cards = request.form.getlist("user_cards")
-    user_name = request.form.get("user_name")
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            user_id = data.get("user_id")
+            user_name = data.get("user_name")
+            user_cards = data.get("user_cards", [])
+        else:
+            # Extract the user_id, user_name, and user_cards from form data
+            user_id = request.form.get("user_id")
+            user_name = request.form.get("user_name")
+            user_cards = request.form.getlist("user_cards")
+        # Check if either of the parameters is missing
+        if not all([user_cards, user_name, user_id]):
+            # return jsonify({"message": {user_id}}), 200
+            return jsonify({"error": "Missing required parameters"}), 400
+        
+        if not isinstance(user_cards, list):
+            # Convert user_cards into a list
+            user_cards = [user_cards]
 
-    # Check if either of the parameters is missing
-    if not all([user_cards, user_name]):
-        return jsonify({"error": "Missing required parameters"}), 400
-    
-    if not isinstance(user_cards, list):
-        # Convert user_cards into a list
-        user_cards = [user_cards]
-
-    if (database_service.create_user(user_cards, user_name) == True):
-        return jsonify({"message": "User added successfully"}), 200
+        if (database_service.create_user(user_id, user_cards, user_name) == True):
+            return jsonify({"message": "User added successfully"}), 200
+        else: 
+            return jsonify({"error": "Could not create user"}), 400
     else: 
-        return jsonify({"error": "Could not create user"}), 400
+        return jsonify({"error": "Bad Request Method"}), 400
+    ## BELOW IS FOR TESTING
+        # if request.method == 'GET':
+        #     user_id = request.args.get("user_id")
+        #     user_name = request.args.get("user_name")
+        #     user_cards = request.args.getlist("user_cards")
+
+        #     # Check if either of the parameters is missing
+        #     if not all([user_cards, user_name, user_id]):
+        #         # return jsonify({"message": {user_id}}), 200
+        #         return jsonify({"error": "Missing required parameters"}), 400
+            
+        #     if not isinstance(user_cards, list):
+        #         # Convert user_cards into a list
+        #         user_cards = [user_cards]
+
+        #     if (database_service.create_user(user_id, user_cards, user_name) == True):
+        #         return jsonify({"message": "User added successfully"}), 200
+        #     else: 
+        #         return jsonify({"error": "Could not create user"}), 400
+        # else: 
+        #     return jsonify({"error": "Bad Request Method"}), 400
 
 # remove user with their user_id    
 @app.route("/remove_user", methods=['DELETE'])
 def remove_user():
-    user_id = request.form.get("user_id")
+    if request.is_json:
+        data = request.get_json()
+        user_id = data.get("user_id")
+    else:
+        user_id = request.form.get("user_id")
     if not user_id:
         return jsonify({"error": "Missing user_id"}), 400
     if (database_service.delete_user(user_id) == True):
@@ -120,8 +170,13 @@ def remove_user():
 # add a card to a user's list of cards, using the user_id and the card_id
 @app.route("/add_card_to_user", methods=['POST'])
 def add_card_to_user():
-    user_id = request.form.getlist("user_id")
-    card_id = request.form.get("card_id")
+    if request.is_json:
+        data = request.get_json()
+        user_id = data.get("user_id")
+        card_id = data.get("card_id")
+    else:
+        user_id = request.form.get("user_id")
+        card_id = request.form.get("card_id")
 
     # Check if either of the parameters is missing
     if not all([user_id, card_id]):
@@ -134,8 +189,13 @@ def add_card_to_user():
 # remove a card from a user's list of cards using the user_id and card_id
 @app.route("/remove_card_from_user", methods=['DELETE'])
 def remove_card_from_user():
-    user_id = request.form.getlist("user_id")
-    card_id = request.form.get("card_id")
+    if request.is_json:
+        data = request.get_json()
+        user_id = data.get("user_id")
+        card_id = data.get("card_id")
+    else: 
+        user_id = request.form.get("user_id")
+        card_id = request.form.get("card_id")
 
     # Check if either of the parameters is missing
     if not all([user_id, card_id]):

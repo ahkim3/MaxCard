@@ -93,7 +93,43 @@ def delete_card(primary_key_value):
     deletion_status = delete_dynamodb_item('cards', primary_key_value)
     return deletion_status
 
-def create_user(user_cards, user_name):
+def create_user(user_id, user_cards, user_name):
+    """
+    Create a new user in DynamoDB with an automatically incremented user_id.
+
+    Parameters:
+    - user_cards (list): List of dictionaries representing user cards.
+    - user_name (str): The name of the user.
+
+    Returns:
+    - bool: True if the user was created successfully, False otherwise.
+    """
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('users')
+
+    try:
+        # Convert user_cards to a list of numbers
+        user_cards = [int(card) for card in user_cards]
+
+        # Prepare the item to be added to the DynamoDB table
+        new_user_item = {
+            'user_id': Decimal(str(user_id)),
+            'user_cards': user_cards,
+            'user_name': user_name
+        }
+
+        # Put the new user item into the DynamoDB table
+        table.put_item(Item=new_user_item)
+
+        print(f"User with user_id '{user_id}' created successfully.")
+        return True
+
+    except Exception as e:
+        print(f"Error creating user: {str(e)}")
+        return False
+
+# for testing purposes and too lazy to generate user id
+def create_user_without_user_id(user_cards, user_name):
     """
     Create a new user in DynamoDB with an automatically incremented user_id.
 
@@ -114,6 +150,9 @@ def create_user(user_cards, user_name):
 
         # Increment the user_id for the new user
         new_user_id = max_user_id + 1
+
+        # Convert user_cards to a list of numbers
+        user_cards = [int(card) for card in user_cards]
 
         # Prepare the item to be added to the DynamoDB table
         new_user_item = {
@@ -229,8 +268,8 @@ def delete_card_from_user(user_id, card_id):
 # primary_key_value_to_delete = 3
 # deleted_successfully = delete_card(primary_key_value_to_delete)
     
-## Delete user example usage:
-# primary_key_value_to_delete = 1
+# # Delete user example usage:
+# primary_key_value_to_delete = 4132024
 # deleted_successfully = delete_user(primary_key_value_to_delete)
 
 ## Add card example usage:
@@ -245,7 +284,9 @@ def delete_card_from_user(user_id, card_id):
 ## create user example usage:
 # user_cards_list = [0, 1]
 # user_name_value = 'JimR'
-# created_successfully = create_user(user_cards_list, user_name_value)
+# user_id = 10
+# # created_successfully = create_user_without_user_id(user_cards_list, user_name_value)
+# created_successfully = create_user(user_id, user_cards_list, user_name_value)
 
 ## Example add_card_to_user() usage:
 # user_id_to_add = 1 
