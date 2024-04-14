@@ -86,25 +86,58 @@ def remove_card():
     else: 
         return jsonify({"error": "Could not delete card with id of {card_id}"}), 400
 
-# add a new user, user_id is automatically assigned
-@app.route("/add_user", methods=['POST'])
+# add a new user **WITH USER ID!!**
+# example: http://44.220.169.6:5000//add_user?user_id=4132024&user_name=test_man&user_cards=1&user_cards=2&user_cards=3
+@app.route("/add_user", methods=['POST', 'GET'])
 def add_user():
     # Extract the user_cards and user_name parameters from the request data
-    user_cards = request.form.getlist("user_cards")
-    user_name = request.form.get("user_name")
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            user_id = data.get("user_id")
+            user_name = data.get("user_name")
+            user_cards = data.get("user_cards", [])
+        else:
+            # Extract the user_id, user_name, and user_cards from form data
+            user_id = request.form.get("user_id")
+            user_name = request.form.get("user_name")
+            user_cards = request.form.getlist("user_cards")
+        # Check if either of the parameters is missing
+        if not all([user_cards, user_name, user_id]):
+            # return jsonify({"message": {user_id}}), 200
+            return jsonify({"error": "Missing required parameters"}), 400
+        
+        if not isinstance(user_cards, list):
+            # Convert user_cards into a list
+            user_cards = [user_cards]
 
-    # Check if either of the parameters is missing
-    if not all([user_cards, user_name]):
-        return jsonify({"error": "Missing required parameters"}), 400
-    
-    if not isinstance(user_cards, list):
-        # Convert user_cards into a list
-        user_cards = [user_cards]
-
-    if (database_service.create_user(user_cards, user_name) == True):
-        return jsonify({"message": "User added successfully"}), 200
+        if (database_service.create_user(user_id, user_cards, user_name) == True):
+            return jsonify({"message": "User added successfully"}), 200
+        else: 
+            return jsonify({"error": "Could not create user"}), 400
     else: 
-        return jsonify({"error": "Could not create user"}), 400
+        return jsonify({"error": "Bad Request Method"}), 400
+    ## BELOW IS FOR TESTING
+        # if request.method == 'GET':
+        #     user_id = request.args.get("user_id")
+        #     user_name = request.args.get("user_name")
+        #     user_cards = request.args.getlist("user_cards")
+
+        #     # Check if either of the parameters is missing
+        #     if not all([user_cards, user_name, user_id]):
+        #         # return jsonify({"message": {user_id}}), 200
+        #         return jsonify({"error": "Missing required parameters"}), 400
+            
+        #     if not isinstance(user_cards, list):
+        #         # Convert user_cards into a list
+        #         user_cards = [user_cards]
+
+        #     if (database_service.create_user(user_id, user_cards, user_name) == True):
+        #         return jsonify({"message": "User added successfully"}), 200
+        #     else: 
+        #         return jsonify({"error": "Could not create user"}), 400
+        # else: 
+        #     return jsonify({"error": "Bad Request Method"}), 400
 
 # remove user with their user_id    
 @app.route("/remove_user", methods=['DELETE'])
