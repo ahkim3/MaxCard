@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+
 import {
   useFonts,
   Jost_500Medium,
@@ -15,6 +16,7 @@ import {
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
+
 
 export const NavBar = ({navigation}) => {
   return (
@@ -28,29 +30,29 @@ export const NavBar = ({navigation}) => {
             <Text style={styles.navBack}>{"<"}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.navItems}
-            onPress={console.log("Wallet button pressed!")}
-          >
-            <Image
-              source={require("./../assets/wallet.png")}
-              resizeMode="contain"
-              style={styles.navWallet}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItems}
+          onPress={() => navigation.navigate("Wallet")}
+        >
+          <Image
+            source={require("./../assets/wallet.png")}
+            resizeMode="contain"
+            style={styles.navWallet}
+          />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.navItems}
-            onPress={console.log("Settings button pressed!")}
-          >
-            <Image
-              source={require("./../assets/settings.png")}
-              resizeMode="contain"
-              style={styles.navSettings}
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={styles.navItems}
+          onPress={() => navigation.navigate("Settings")}
+        >
+          <Image
+            source={require("./../assets/settings.png")}
+            resizeMode="contain"
+            style={styles.navSettings}
+          />
+        </TouchableOpacity>
       </View>
+    </View>
   );
 }
 

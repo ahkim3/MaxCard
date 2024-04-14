@@ -42,7 +42,7 @@ def get_google_api_key():
 
 
 class Card:
-    def __init__(self, card_name: str, card_categories:dict, card_base:float, card_company:str, card_type:str, card_id:int, card_specials:dict):
+    def __init__(self, card_name: str = "", card_categories:dict = {}, card_base:float = 0.0, card_company:str = "", card_type:str = "", card_id:int = 0, card_specials:dict = {}, image_url: str = ""):
         self.card_name      = card_name
         self.card_categories= card_categories
         self.card_base      = card_base
@@ -50,6 +50,7 @@ class Card:
         self.card_type      = card_type
         self.card_id        = card_id
         self.card_specials  = card_specials
+        self.image_url      = image_url
 
     # for jsonify purposes
     def to_dict(self):
@@ -60,11 +61,12 @@ class Card:
             'card_company': self.card_company,
             'card_type' : self.card_type,
             'card_id': self.card_id,
-            'card_specials': self.card_specials
+            'card_specials': self.card_specials,
+            'image_url': self.image_url
         }
 
     def __repr__(self):
-        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials})"
+        return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials}), image_url={self.image_url}"
 
 class User:
     def __init__(self, user_id, user_cards, user_name):
@@ -235,26 +237,78 @@ def get_resolved_url(url):
         print("Error fetching URL:", e)
         return "https://media.licdn.com/dms/image/C4D03AQFG-XnlnkNM0w/profile-displayphoto-shrink_200_200/0/1614214136294?e=2147483647&v=beta&t=YErihHr6isIHpwfLATetdd9R_tuEZQdgRtR0E7Q0QnE" # Default image
 
-# takes the coordinates and returns the nearest locations
+# takes the coordinates and returns locations (1 prominent location if it exists, followed by closest locations)
 def nearest_locations(latitude, longitude):
-
-
-    # Use this code snippet in your app.
-# If you need more information about configurations
-# or implementing the sample code, visit the AWS docs:
-# https://aws.amazon.com/developer/language/python/
+    GET_PHOTOS = False
+    DEBUG = False
 
     if not (latitude or longitude):
         return None
+
+    # If running locally, use the environment variable
+    if (DEBUG):
+        try:
+            GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+        except KeyError:
+            print("Error: GOOGLE_MAPS_API_KEY not set")
+            return None
 
     nearby_locations = []
 
     gmaps = googlemaps.Client(key=get_google_api_key())
 
     location = (latitude, longitude)
-    max_results = 10
+    max_results = 1
+    how_to_rank = 'prominence'
+    search_radius = 40
+    valid_types = ['food', 'restaurant', 'drugstore', 'pharmacy', 'bar', 'lodging', 'gas_station', 'grocery_or_supermarket', 'supermarket', 'shopping_mall', 'clothing_store', 'department_store', 'electronics_store', 'home_goods_store', 'jewelry_store', 'shoe_store', 'shopping_mall', 'store', 'book_store', 'convenience_store', 'liquor_store', 'meal_delivery', 'meal_takeaway', 'bakery', 'cafe']
+
+    # Find the most prominent location
+    places_result = gmaps.places_nearby(
+        location=location,
+        radius=search_radius,
+        keyword=None,
+        language=None,
+        min_price=None,
+        max_price=None,
+        name=None,
+        open_now=True,
+        rank_by=how_to_rank,
+        page_token=None
+    )
+
+    # Take top result off list and store if validated
+    potential_primary_location = places_result['results'][:max_results]
+    if potential_primary_location:
+        primary_location = potential_primary_location[0]
+        place_types = primary_location.get('types', [])
+        if (any(place_type in valid_types for place_type in place_types)):
+            location_info = {
+                'name': primary_location['name'],
+                'address': primary_location['vicinity'],
+                'types': place_types
+            }
+
+            # Check if this place has a rating
+            if 'rating' in primary_location:
+                # (If enabled) Check if the place has photos
+                if GET_PHOTOS and ('photos' in primary_location):
+                    # Get the reference of the first photo
+                    photo_reference = primary_location['photos'][0]['photo_reference']
+                    # Construct the photo URL using the reference
+                    unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
+
+                    # Resolve photo URL
+                    photo_url = get_resolved_url(unsanitized_photo_url)
+
+                    # Add the photo URL to the location information
+                    location_info['photo_url'] = photo_url
+
+                nearby_locations.append(location_info)
+
+    # Find results ranked by distance
     how_to_rank = 'distance'
-    valid_types = ['store', 'food', 'restaurant', 'drugstore', 'pharmacy', 'bar', 'lodging', 'gas_station']
+    max_results = 10
 
     places_result = gmaps.places_nearby(
         location=location,
@@ -266,13 +320,12 @@ def nearest_locations(latitude, longitude):
         name=None,
         open_now=False,
         rank_by=how_to_rank,
-        type=valid_types,
+        type="store",
         page_token=None
     )
 
     results = places_result['results'][:max_results]
-
-
+    # print(results)
 
     # Calculate distance and add location information to the list
     for place in results:
@@ -282,21 +335,24 @@ def nearest_locations(latitude, longitude):
                 'name': place['name'],
                 'address': place['vicinity'],
                 'types': place_types
-
             }
 
-            # Check if the place has photos
-            if 'photos' in place:
+            # Skip this place if it doesn't have a rating
+            if not 'rating' in place:
+                continue
+
+            # (If enabled) Check if the place has photos and if less than 6 locations are currently stored
+            if GET_PHOTOS and ('photos' in place and len(nearby_locations) < 6):
                 # Get the reference of the first photo
                 photo_reference = place['photos'][0]['photo_reference']
                 # Construct the photo URL using the reference
-                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={get_google_api_key()}"
+                unsanitized_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={GOOGLE_MAPS_API_KEY}"
 
-                # Resolve photo URL
-                photo_url = get_resolved_url(unsanitized_photo_url)
+            #     # Resolve photo URL
+            #     photo_url = get_resolved_url(unsanitized_photo_url)
 
-                # Add the photo URL to the location information
-                location_info['photo_url'] = photo_url
+            #     # Add the photo URL to the location information
+            #     location_info['photo_url'] = photo_url
 
             nearby_locations.append(location_info)
     return nearby_locations
