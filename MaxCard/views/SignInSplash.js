@@ -60,7 +60,8 @@ export function SignInSplash({navigation}) {
       }
     }
     const user = await getCurrentUserInfo();
-    navigation.navigate("Loading", {userId: user.user.id});
+    console.log(user);
+    navigation.navigate("Loading", {userId: user.user.id, userName: user.user.email});
   };
 
   async function getCurrentUserInfo() {

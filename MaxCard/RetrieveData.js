@@ -45,38 +45,48 @@ export function GetLocationData() {
   return [isLoading, locationData, errorMsg];
 }
 
-export function GetUserData(userId) {
+export function GetUserData(userId, userName) {
   const [isLoading, setLoading] = useState(true);
   const [userData, setUserData] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
 
   const GetUser = async(userId)  => {
     let url = startUrl + "get_users";
-    try {
-      const response = await fetch(url, {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    const json = await response.json();
+
+    // Check if user already exists
+    let exists = new Boolean(false);
+    json.map((item) => {
+      if(item.user_id == userId) {
+        exists = true;
+      }
+    });
+
+    console.log("does user exist? " + exists);
+
+    if(exists == Boolean(false)) {
+      // add user
+      console.log("trying to add user");
+      let urlAdd = startUrl + "add_user";
+      const responseAdd = await fetch(urlAdd, {
+        method: 'POST',
         headers: {
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify({ user_id: userId, user_name: userName, user_cards: []})
       });
-      const json = await response.json();
-
-      // Check if user already exists
-      let exists = new Boolean(false);
-      const user = json.map((item) => {
-        if(item.user_id == userId) {
-          exists = true;
-        }
-      });
-
-      if(!exists) {
-        // add user
-      }
-      console.log(exists);
+      const jsonAdd = await responseAdd.json();
+      console.log(jsonAdd);
     }
-    catch{}
+
   };
 
   useEffect(() => {
-    GetUser(userId);
+    GetUser(userId, userName);
   }, []);
 }
