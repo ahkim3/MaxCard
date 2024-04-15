@@ -104,7 +104,7 @@ def create_user(user_id, user_cards, user_name):
     Returns:
     - bool: True if the user was created successfully, False otherwise.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('users')
 
     try:
