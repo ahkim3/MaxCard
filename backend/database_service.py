@@ -114,7 +114,7 @@ def create_user(user_id):
         # Prepare the item to be added to the DynamoDB table
         new_user_item = {
             'user_id': str(user_id),
-            #'user_cards': user_cards,
+            'user_cards': [],
             #'user_name': user_name
         }
 
