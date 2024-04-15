@@ -108,23 +108,23 @@ def add_user():
         if request.is_json:
             data = request.get_json()
             user_id = data.get("user_id")
-            user_name = data.get("user_name")
-            user_cards = data.get("user_cards", [])
+            #user_name = data.get("user_name")
+            #user_cards = data.get("user_cards", [])
         else:
             # Extract the user_id, user_name, and user_cards from form data
             user_id = request.form.get("user_id")
-            user_name = request.form.get("user_name")
-            user_cards = request.form.getlist("user_cards")
+            #user_name = request.form.get("user_name")
+            #user_cards = request.form.getlist("user_cards")
         # Check if either of the parameters is missing
-        if not all([user_cards, user_name, user_id]):
+        if not user_id:
             # return jsonify({"message": {user_id}}), 200
             return jsonify({"error": "Missing required parameters"}), 400
         
-        if not isinstance(user_cards, list):
-            # Convert user_cards into a list
-            user_cards = [user_cards]
+        # if not isinstance(user_cards, list):
+        #     # Convert user_cards into a list
+        #     user_cards = [user_cards]
 
-        if (database_service.create_user(user_id, user_cards, user_name) == True):
+        if (database_service.create_user(user_id) == True):
             return jsonify({"message": "User added successfully"}), 200
         else: 
             return jsonify({"error": "Could not create user"}), 400
