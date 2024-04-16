@@ -47,6 +47,7 @@ export function GetLocationData() {
 
 export function GetUserData(userId) {
   const [user, setUser] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   const GetUser = async(userId)  => {
     let url = startUrl + "get_users";
@@ -62,15 +63,11 @@ export function GetUserData(userId) {
     json.map((item) => {
       if(item.user_id == userId) {
         exists = true;
-        return item;
       }
     });
 
-    console.log("does user exist? " + exists);
-
     if(exists == Boolean(false)) {
       // add user
-      console.log("trying to add user");
       let urlAdd = startUrl + "add_user";
       try {
         const responseAdd = await fetch(urlAdd, {
@@ -81,24 +78,18 @@ export function GetUserData(userId) {
           },
           body: JSON.stringify({ user_id: userId })
         });
-        console.log("now try to get response");
-        const jsonAdd = await responseAdd.text();
+        const jsonAdd = await responseAdd.json();
         console.log("Response: " + JSON.stringify(jsonAdd));
       } catch(error) {
         console.error(error);
       }
-      // json.map((item) => {
-      //   if(item.user_id == userId) {
-      //     return item;
-      //   }
-      // });
     }
 
   };
 
   useEffect(() => {
-    const userData = GetUser(userId);
-    setUser(userData);
+    GetUser(userId);
+    setLoading(false);
   }, []);
-  return user;
+  return isLoading;
 }
