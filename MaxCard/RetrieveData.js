@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 
-export default function GetLocationData() {
+const startUrl = "http://44.220.169.6:5000/";
+
+export function GetLocationData() {
 
   const [isLoading, setLoading] = useState(true);
   const [locationData, SetLocationData] = useState([]);
@@ -41,4 +43,53 @@ export default function GetLocationData() {
   }, []);
 
   return [isLoading, locationData, errorMsg];
+}
+
+export function GetUserData(userId) {
+  const [user, setUser] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+
+  const GetUser = async(userId)  => {
+    let url = startUrl + "get_users";
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    const json = await response.json();
+
+    // Check if user already exists
+    let exists = new Boolean(false);
+    json.map((item) => {
+      if(item.user_id == userId) {
+        exists = true;
+      }
+    });
+
+    if(exists == Boolean(false)) {
+      // add user
+      let urlAdd = startUrl + "add_user";
+      try {
+        const responseAdd = await fetch(urlAdd, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: userId })
+        });
+        const jsonAdd = await responseAdd.json();
+        console.log("Response: " + JSON.stringify(jsonAdd));
+      } catch(error) {
+        console.error(error);
+      }
+    }
+
+  };
+
+  useEffect(() => {
+    GetUser(userId);
+    setLoading(false);
+  }, []);
+  return isLoading;
 }
