@@ -242,14 +242,6 @@ def nearest_locations(latitude, longitude):
     if not (latitude or longitude):
         return None
 
-    # If running locally, use the environment variable
-    if (DEBUG):
-        try:
-            GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
-        except KeyError:
-            print("Error: GOOGLE_MAPS_API_KEY not set")
-            return None
-
     nearby_locations = []
 
     gmaps = googlemaps.Client(key=get_google_api_key())
@@ -378,13 +370,13 @@ def get_best_cards(user_id, latitude, longitude):
         # keep track of the best card's id and its rate
         best_rate = 0
         best_card = 0
+        location_name = location['name']
 
         for card in user_cards:
             card_specials = card['card_specials']
             card_categories = card['card_categories']
             card_base = card['card_base']
             card_id = card['card_id']
-            location_name = location['name']
 
             # check for specials -- match the location name to the name of any specials that the card might have
             for special in card_specials:
