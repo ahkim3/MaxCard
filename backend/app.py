@@ -256,11 +256,7 @@ def get_location_cards():
         longitude = float(longitude)
     except ValueError:
         return jsonify({"error": "Invalid latitude or longitude"}), 400
-    
-    try:
-        user_id = int(user_id)
-    except ValueError:
-        return jsonify({"error": "Invalid user_id"}), 400
+
     
     best_cards = database_query.get_best_cards(user_id, latitude, longitude)
    
