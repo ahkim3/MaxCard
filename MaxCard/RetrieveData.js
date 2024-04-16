@@ -45,10 +45,8 @@ export function GetLocationData() {
   return [isLoading, locationData, errorMsg];
 }
 
-export function GetUserData(userId, userName) {
-  const [isLoading, setLoading] = useState(true);
-  const [userData, setUserData] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(null);
+export function GetUserData(userId) {
+  const [user, setUser] = useState([]);
 
   const GetUser = async(userId)  => {
     let url = startUrl + "get_users";
@@ -64,6 +62,7 @@ export function GetUserData(userId, userName) {
     json.map((item) => {
       if(item.user_id == userId) {
         exists = true;
+        return item;
       }
     });
 
@@ -73,20 +72,33 @@ export function GetUserData(userId, userName) {
       // add user
       console.log("trying to add user");
       let urlAdd = startUrl + "add_user";
-      const responseAdd = await fetch(urlAdd, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ user_id: userId, user_name: userName, user_cards: []})
-      });
-      const jsonAdd = await responseAdd.json();
-      console.log(jsonAdd);
+      try {
+        const responseAdd = await fetch(urlAdd, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: userId })
+        });
+        console.log("now try to get response");
+        const jsonAdd = await responseAdd.text();
+        console.log("Response: " + JSON.stringify(jsonAdd));
+      } catch(error) {
+        console.error(error);
+      }
+      // json.map((item) => {
+      //   if(item.user_id == userId) {
+      //     return item;
+      //   }
+      // });
     }
 
   };
 
   useEffect(() => {
-    GetUser(userId, userName);
+    const userData = GetUser(userId);
+    setUser(userData);
   }, []);
+  return user;
 }

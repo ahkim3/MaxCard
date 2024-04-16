@@ -50,8 +50,8 @@ export function LoadingScreen({navigation, route}) {
   const locationData = data[1];
   const errorMsg = data[2];
 
-  const userdata = GetUserData(route.params.userId, route.params.userName);
-  console.log(userdata);
+  const userdata = GetUserData(route.params.userId);
+  // console.log(userdata);
 
   let [fontsLoaded] = useFonts({Jost_500Medium,});
   if(!fontsLoaded) {
