@@ -14,7 +14,7 @@ import {
   Jost_500Medium,
   Jost_700Bold
 } from '@expo-google-fonts/jost';
-import GetLocationData from '../RetrieveData';
+import { GetLocationData } from '../RetrieveData';
 import { LoadingScreen } from './LoadingScreen';
 
 const screenHeight = Dimensions.get('window').height;
