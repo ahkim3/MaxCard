@@ -200,7 +200,6 @@ def get_users():
 
 # returns the list of cards owned by a user
 def get_user_cards(user_id):
-    user_id = int(user_id)
     users_table_name = 'users'
     dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
     users_table = dynamodb.Table(users_table_name)
@@ -360,7 +359,6 @@ def nearest_locations(latitude, longitude):
 # returns a list in the form of (Location, Card_ID, cashback_rate)
 def get_best_cards(user_id, latitude, longitude):
     try:
-        user_id = int(user_id)
         latitude = float(latitude)
         longitude = float(longitude)
     except ValueError:
