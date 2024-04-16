@@ -93,7 +93,7 @@ def delete_card(primary_key_value):
     deletion_status = delete_dynamodb_item('cards', primary_key_value)
     return deletion_status
 
-def create_user(user_id, user_cards, user_name):
+def create_user(user_id):
     """
     Create a new user in DynamoDB with an automatically incremented user_id.
 
@@ -104,18 +104,18 @@ def create_user(user_id, user_cards, user_name):
     Returns:
     - bool: True if the user was created successfully, False otherwise.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('users')
 
     try:
         # Convert user_cards to a list of numbers
-        user_cards = [int(card) for card in user_cards]
+        #user_cards = [int(card) for card in user_cards]
 
         # Prepare the item to be added to the DynamoDB table
         new_user_item = {
-            'user_id': Decimal(str(user_id)),
-            'user_cards': user_cards,
-            'user_name': user_name
+            'user_id': str(user_id),
+            'user_cards': [],
+            #'user_name': user_name
         }
 
         # Put the new user item into the DynamoDB table
