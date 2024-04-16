@@ -69,21 +69,17 @@ class Card:
         return f"Card(card_name={self.card_name}, card_categories={self.card_categories}, card_base={self.card_base}, card_company={self.card_company}, card_type={self.card_type}, card_id={self.card_id}, card_specials={self.card_specials}), image_url={self.image_url}"
 
 class User:
-    def __init__(self, user_id, user_cards, user_name):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.user_cards = user_cards
-        self.user_name = user_name
 
     def to_dict(self):
         return {
             'user_id': self.user_id,
-            'user_cards': self.user_cards,
-            'user_name' : self.user_name
         }
 
 
     def __repr__(self):
-        return f"User(user_id={self.user_id}, user_cards={self.user_cards}, user_name={self.user_name})"
+        return f"User(user_id={self.user_id})"
 
 def card_list_to_dict(card_list):
     """
