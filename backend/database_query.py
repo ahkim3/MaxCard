@@ -369,7 +369,7 @@ def get_best_cards(user_id, latitude, longitude):
     for location in nearest_six:
         # keep track of the best card's id and its rate
         best_rate = 0
-        best_card = 0
+        best_card = None
         location_name = location['name']
 
         for card in user_cards:
@@ -383,20 +383,26 @@ def get_best_cards(user_id, latitude, longitude):
                 if (location_name in special):
                     if(card_specials[location_name] > best_rate):
                         best_rate = card_specials[location_name]
-                        best_card = card_id
+                        best_card = card
             # check for category rate -- check each category of the vendor labeled by google maps
             for category in location['types']:
                 for card_category in card_categories:
                     if (category in card_category):
                         if(card_categories[category] > best_rate):
                             best_rate = card_categories[category]
-                            best_card = card_id
+                            best_card = card
             # check for base rate
             if (card_base > best_rate):
                 best_rate = card_base
-                best_card = card_id
+                best_card = card
         # store the best card
-        best_cards.append((location_name, best_card, best_rate))
+        print(user_cards)
+        print(best_card)
+        print(type(user_cards))
+        print(type(best_card))
+        if best_card == 0:
+            continue
+        best_cards.append((location_name, best_card['card_id'], card['image_url']))
     return best_cards
 
 ## DEBUG Examples ----------------------
