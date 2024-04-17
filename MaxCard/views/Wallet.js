@@ -8,6 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import  NavBar  from "./Navbar";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -16,11 +17,15 @@ const screenWidth = Dimensions.get("window").width;
 const Wallet = ({ route }) => {
     const [cards, setCards] = useState([]);
     useEffect(() => {
-       fetch("http://44.220.169.6:5000//view_account_cards?user_id=1")
-       .then(results => results.json())
-       .then(data => {
-        setCards(data);
-      });
+      const fetchData = async () => {
+        let user = await GoogleSignin.getCurrentUser();
+        fetch("http://44.220.169.6:5000//view_account_cards?user_id="+ user.user.id)
+        .then(results => results.json())
+        .then(data => {
+         setCards(data);
+       });
+      };
+      fetchData();
     }, []);
 
     return (
@@ -38,7 +43,7 @@ const Wallet = ({ route }) => {
           {cards.map((card, i) => (
             <Image
               key={i}
-              source={require("../assets/card.png")}
+              source={ {uri: card.image_url}}
               resizeMode="contain"
               style={[styles.card, { zIndex: 5 + i }, { top: -150 * i }]}
             />
