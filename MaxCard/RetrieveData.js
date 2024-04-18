@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const startUrl = "http://44.220.169.6:5000/";
 
@@ -17,11 +18,13 @@ export function GetLocationData() {
         setErrorMsg('Permission to access location was denied');
       }
       else {
+        console.log("getCurrentUser():");
+        let user = await GoogleSignin.getCurrentUser();
         let location = await Location.getCurrentPositionAsync({});
         console.log(JSON.stringify(location));
         let latitude = location.coords.latitude; //38.95082173840749;
         let longitude = location.coords.longitude; //-92.32771776690679;
-        let url = "http://44.220.169.6:5000/get_location?latitude=" + latitude + "&longitude=" + longitude;
+        let url = "http://44.220.169.6:5000/get_location_cards?user_id=" + user.user.id +"&latitude=" + latitude + "&longitude=" + longitude;
         try {
             const response = await fetch(url, {
               headers: {

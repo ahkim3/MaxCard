@@ -91,10 +91,10 @@ export const Home = ({route, navigation}) => {
         style={styles.background}>
         <BackgroundLogo/>
         <Text style={styles.title}>Best Card For: </Text>
-        <Text style={styles.subtext}>{curLocation.name}</Text>
+        <Text style={styles.subtext}>{curLocation[0]}</Text>
         <View style={styles.cardContainer}>
           <Image
-            source={require("./../assets/card.png")}
+            source={{ uri: curLocation[2]}}
             style={styles.card}
             resizeMode="contain"
           />
