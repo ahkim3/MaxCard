@@ -14,32 +14,44 @@ import {
   Jost_500Medium,
   Jost_700Bold
 } from '@expo-google-fonts/jost';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export function Settings({navigation}) {  
-    let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
-    if(!fontsLoaded) {
-        return;
-    } else {
-        return (
-        <LinearGradient
-            colors={['#2C506F', 'black']}
-            style={styles.background}>
-            <BackgroundLogo/>
-            <Text style={styles.title}>Settings</Text>
-            <View style={{justifyContent: 'space-evenly', height: screenWidth}}>
-                <Button title={"Add Card\nto Wallet"} onpress={console.log("Add card to wallet button pressed")}/>
-                <Button title={"Remove Card\nfrom Wallet"} onpress={console.log("Remove card from wallet button pressed")}/>
-                <Button title={"Logout"} onpress={console.log("Logout button pressed")}/>
-            </View>
-            <View style={{position: 'absolute', top: screenHeight}}>
-                <NavBar navigation={navigation}/>
-            </View>
-        </LinearGradient>
-        );
+  _signOut = async() => {
+    try {
+      await GoogleSignin.signOut();
+      navigation.navigate("SignInSplash");
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
+  if(!fontsLoaded) {
+      return;
+  } else {
+      return (
+      <LinearGradient
+          colors={['#2C506F', 'black']}
+          style={styles.background}>
+          <BackgroundLogo/>
+          <Text style={styles.title}>Settings</Text>
+          <View style={{justifyContent: 'space-evenly', height: screenWidth}}>
+              <Button title={"Add Card\nto Wallet"} onpress={console.log("Add card to wallet button pressed")}/>
+              <Button title={"Remove Card\nfrom Wallet"} onpress={console.log("Remove card from wallet button pressed")}/>
+              <Button title={"Logout"} onpress={() => {
+                this._signOut()
+              }}/>
+          </View>
+          <View style={{position: 'absolute', top: screenHeight}}>
+              <NavBar navigation={navigation}/>
+          </View>
+      </LinearGradient>
+      );
+  }
 }
 
 const styles = StyleSheet.create({

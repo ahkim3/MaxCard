@@ -21,28 +21,14 @@ GoogleSignin.configure({
 
 export function SignInSplash({navigation}) {
 
-  const [error, SetError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
-  const [hasPreviousSignIn, setHasPreviousSignIn] = useState('');
-
-  function CheckPreviousSignIn() {
-    const response = GoogleSignin.isSignedIn();
-    setHasPreviousSignIn(response);
-    return response;
-  };
-
   _signIn = async() => {
     console.log("signing in...");
-    const previousSignIn = Boolean(CheckPreviousSignIn());
-    console.log("previous sign in? " + previousSignIn);
-    if (!previousSignIn) {
+    const user = await getCurrentUserInfo();
+    console.log("previous sign in? " + (user ==  null ? "no" : "yes"));
+    if (user == null) {
       try {
         await GoogleSignin.hasPlayServices();
-        const userInfo = await GoogleSignin.signIn();
-        // console.log(userInfo);
-        setState({ userInfo, error: undefined });
+        await GoogleSignin.signIn();
       } catch (error) {
         switch (error.code) {
           case statusCodes.SIGN_IN_CANCELLED:
@@ -59,32 +45,19 @@ export function SignInSplash({navigation}) {
         }
       }
     }
-    const user = await getCurrentUserInfo();
-    console.log(user);
-    navigation.navigate("Loading", {userId: user.user.id});
+    const userSend = await getCurrentUserInfo();
+    navigation.navigate("Loading", {userId: userSend.user.id});
   };
 
   async function getCurrentUserInfo() {
     try {
-        const response = await GoogleSignin.signInSilently();
-        setUserInfo(response);
-        return response;
-        // console.log(response);
+        return await GoogleSignin.signInSilently();
     } catch ( error ) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         // user has not signed in yet
       } else {
         // some other error
       }
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.signOut();
-      setState({ user: null }); // don't forget to remove user from app state
-    } catch (error) {
-      console.error(error);
     }
   };
   
