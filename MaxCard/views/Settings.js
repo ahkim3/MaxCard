@@ -30,7 +30,7 @@ export function Settings({navigation}) {
             <BackgroundLogo/>
             <Text style={styles.title}>Settings</Text>
             <View style={{justifyContent: 'space-evenly', height: screenWidth}}>
-                <Button title={"Add Card\nto Wallet"} onpress={console.log("Add card to wallet button pressed")}/>
+                <Button title={"Add Card\nto Wallet"} onpress={navigation.navigate("AddCard")}/>
                 <Button title={"Remove Card\nfrom Wallet"} onpress={console.log("Remove card from wallet button pressed")}/>
                 <Button title={"Logout"} onpress={console.log("Logout button pressed")}/>
             </View>
