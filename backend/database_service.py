@@ -20,7 +20,7 @@ def delete_dynamodb_item(table_name, primary_key_value):
     Returns:
     - bool: True if the item was deleted successfully, False otherwise.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(table_name)
 
     primary_key_name = ''
@@ -57,7 +57,7 @@ def create_card(card_base, card_categories, card_company, card_type, card_name, 
     Returns:
     - bool: True if the card was created successfully, False otherwise.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('cards')
 
     try:
@@ -140,7 +140,7 @@ def create_user_without_user_id(user_cards, user_name):
     Returns:
     - bool: True if the user was created successfully, False otherwise.
     """
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('users')
 
     try:
@@ -179,7 +179,7 @@ def delete_user(primary_key_value):
 # returns an error if the card is already attached to the user or doesn't exist
 def add_card_to_user(user_id, card_id):
 
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     users_table = dynamodb.Table('users')
     cards_table = dynamodb.Table('cards')
 
@@ -226,7 +226,7 @@ def add_card_to_user(user_id, card_id):
     
 # deletes a card with the corresponding card_id from the given user. returns false if fail
 def delete_card_from_user(user_id, card_id):
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     users_table = dynamodb.Table('users')
 
     try:
