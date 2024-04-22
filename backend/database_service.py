@@ -178,7 +178,7 @@ def delete_user(primary_key_value):
 # takes the primary user id and card id and adds the card to the user.
 # returns an error if the card is already attached to the user or doesn't exist
 def add_card_to_user(user_id, card_id):
-
+    user_id = str(user_id)
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     users_table = dynamodb.Table('users')
     cards_table = dynamodb.Table('cards')
