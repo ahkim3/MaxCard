@@ -396,9 +396,9 @@ def get_best_cards(user_id, latitude, longitude):
                 best_rate = card_base
                 best_card = card
         # store the best card
-        if best_card == 0:
+        if best_card == None:
             continue
-        best_cards.append((location_name, best_card['card_id'], card['image_url']))
+        best_cards.append((location_name, best_card['card_id'], best_card['image_url']))
     return best_cards
 
 ## DEBUG Examples ----------------------
