@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Picker } from '@react-native-picker/picker';
 import { NavBar } from "./Home";
 import SearchBar from "./SearchBar";
 import { BackgroundLogo } from "./Home";
@@ -30,7 +29,6 @@ const AddCard = ({navigation}) => {
             }),
           }
         );
-
         const json = await response.json();
         console.log('Add card response:', json);
     } else {
@@ -49,9 +47,7 @@ const AddCard = ({navigation}) => {
       <View>
         <SearchBar onSelectCard={setSelectedCard} />
       </View>
-      <View
-        style={{ position: "absolute", top: screenHeight + 15, right: 200 }}
-      >
+      <View style={{ position: "absolute", top: screenHeight + 15, right: 200 }}>
         <NavBar navigation={navigation} />
       </View>
     </LinearGradient>
