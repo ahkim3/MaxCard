@@ -5,7 +5,7 @@ import {
   useFonts,
   Jost_500Medium,
 } from '@expo-google-fonts/jost';
-import GetLocationData from "../RetrieveData";
+import { GetLocationData, GetUserData } from "../RetrieveData";
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -44,16 +44,18 @@ const GoHome = ({navigation, locationData}) => {
   return;
 };
 
-export function LoadingScreen({navigation}) {
+export function LoadingScreen({navigation, route}) {
   const data = GetLocationData();
   const isLoading = data[0];
   const locationData = data[1];
   const errorMsg = data[2];
 
+  const isUserLoading = GetUserData(route.params.userId);
+
   let [fontsLoaded] = useFonts({Jost_500Medium,});
   if(!fontsLoaded) {
     return;
-  } else if(isLoading) {
+  } else if(isLoading || isUserLoading) {
     return (
       <View style={styles.container}>
         <LinearGradient

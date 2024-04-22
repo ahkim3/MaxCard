@@ -14,25 +14,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-MaxCard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-MaxCard.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		CAA364954B8C4B2382A2FCAF /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9017E36666447B695A86BCE /* noop-file.swift */; };
-		B2389E62F21B4CD9830C7C10 /* Jost-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 769254DF4B7141ECA19A06DD /* Jost-Black.ttf */; };
-		58A13C740DA24B688779BCDF /* Jost-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E81F1F167F1F4A30A377F014 /* Jost-BlackItalic.ttf */; };
-		F55C9026460842FB82438BB6 /* Jost-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E63EDD3F49814242B094F234 /* Jost-Bold.ttf */; };
-		5990413B644142FDBBBA9244 /* Jost-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC3599D23DE74789886D314C /* Jost-BoldItalic.ttf */; };
-		22486567BDFF42A785E6314E /* Jost-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B7D46420CF940DEA91CAF50 /* Jost-ExtraBold.ttf */; };
-		9D9A6B9D82084EF29C046AC7 /* Jost-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C227C9A82C7F467A9B78441C /* Jost-ExtraBoldItalic.ttf */; };
-		4849F8A1A01A453692C55691 /* Jost-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D82CE89AD204AE79CD0FDA8 /* Jost-ExtraLight.ttf */; };
-		5D3B7BD9BC2E4C5FA3685D54 /* Jost-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B2F7F471AC01457E9878D939 /* Jost-ExtraLightItalic.ttf */; };
-		191EE248224D465E8B3F6F1B /* Jost-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8ED84015DD9440A09A6716AE /* Jost-Italic.ttf */; };
-		440E990877ED4320A76EE985 /* Jost-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23757C2EEAF447DF8DA8B633 /* Jost-Light.ttf */; };
-		1905BE6D631545DA8C52BCC7 /* Jost-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA91FC0F6A9E4A8282E5096A /* Jost-LightItalic.ttf */; };
-		2ECA473B45694F53932541A1 /* Jost-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 135E3B0EA2D044AFB97B3E0F /* Jost-Medium.ttf */; };
-		76DBA8EF0A364225A5F34F18 /* Jost-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2959BBC04CD14F8D8EF924C1 /* Jost-MediumItalic.ttf */; };
-		99FB63545B55477EBA9A4B2D /* Jost-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B9C68150F4F47CCAF99257A /* Jost-Regular.ttf */; };
-		B30A575B819545469CC07BD8 /* Jost-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44A5A82A6BF345FA996901AC /* Jost-SemiBold.ttf */; };
-		AEAF6516492B487192C0E20E /* Jost-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F16041008ABD4E50B68F7CC5 /* Jost-SemiBoldItalic.ttf */; };
-		B725D9DD29E742E3B008400B /* Jost-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A268BDA170F341EE966B0AC9 /* Jost-Thin.ttf */; };
-		D4B2A96219F94B4FB839680F /* Jost-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBB60433433C4B20BE43F1FD /* Jost-ThinItalic.ttf */; };
+		FD92B36212074A1D8CC6FD7E /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61EB214192F947319A78AACA /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,33 +24,15 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MaxCard/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MaxCard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MaxCard/main.m; sourceTree = "<group>"; };
+		390C15FE33BA4BC7996111CD /* MaxCard-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "MaxCard-Bridging-Header.h"; path = "MaxCard/MaxCard-Bridging-Header.h"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-MaxCard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MaxCard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6077E77077C240258606B1D8 /* MaxCard-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "MaxCard-Bridging-Header.h"; path = "MaxCard/MaxCard-Bridging-Header.h"; sourceTree = "<group>"; };
+		61EB214192F947319A78AACA /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "MaxCard/noop-file.swift"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-MaxCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaxCard.debug.xcconfig"; path = "Target Support Files/Pods-MaxCard/Pods-MaxCard.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-MaxCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaxCard.release.xcconfig"; path = "Target Support Files/Pods-MaxCard/Pods-MaxCard.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = MaxCard/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		E9017E36666447B695A86BCE /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "MaxCard/noop-file.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-MaxCard/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		769254DF4B7141ECA19A06DD /* Jost-Black.ttf */ = {isa = PBXFileReference; name = "Jost-Black.ttf"; path = "../assets/fonts/Jost-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E81F1F167F1F4A30A377F014 /* Jost-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Jost-BlackItalic.ttf"; path = "../assets/fonts/Jost-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E63EDD3F49814242B094F234 /* Jost-Bold.ttf */ = {isa = PBXFileReference; name = "Jost-Bold.ttf"; path = "../assets/fonts/Jost-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DC3599D23DE74789886D314C /* Jost-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Jost-BoldItalic.ttf"; path = "../assets/fonts/Jost-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1B7D46420CF940DEA91CAF50 /* Jost-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Jost-ExtraBold.ttf"; path = "../assets/fonts/Jost-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C227C9A82C7F467A9B78441C /* Jost-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Jost-ExtraBoldItalic.ttf"; path = "../assets/fonts/Jost-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3D82CE89AD204AE79CD0FDA8 /* Jost-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Jost-ExtraLight.ttf"; path = "../assets/fonts/Jost-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B2F7F471AC01457E9878D939 /* Jost-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Jost-ExtraLightItalic.ttf"; path = "../assets/fonts/Jost-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8ED84015DD9440A09A6716AE /* Jost-Italic.ttf */ = {isa = PBXFileReference; name = "Jost-Italic.ttf"; path = "../assets/fonts/Jost-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		23757C2EEAF447DF8DA8B633 /* Jost-Light.ttf */ = {isa = PBXFileReference; name = "Jost-Light.ttf"; path = "../assets/fonts/Jost-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		AA91FC0F6A9E4A8282E5096A /* Jost-LightItalic.ttf */ = {isa = PBXFileReference; name = "Jost-LightItalic.ttf"; path = "../assets/fonts/Jost-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		135E3B0EA2D044AFB97B3E0F /* Jost-Medium.ttf */ = {isa = PBXFileReference; name = "Jost-Medium.ttf"; path = "../assets/fonts/Jost-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2959BBC04CD14F8D8EF924C1 /* Jost-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Jost-MediumItalic.ttf"; path = "../assets/fonts/Jost-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4B9C68150F4F47CCAF99257A /* Jost-Regular.ttf */ = {isa = PBXFileReference; name = "Jost-Regular.ttf"; path = "../assets/fonts/Jost-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		44A5A82A6BF345FA996901AC /* Jost-SemiBold.ttf */ = {isa = PBXFileReference; name = "Jost-SemiBold.ttf"; path = "../assets/fonts/Jost-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F16041008ABD4E50B68F7CC5 /* Jost-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Jost-SemiBoldItalic.ttf"; path = "../assets/fonts/Jost-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A268BDA170F341EE966B0AC9 /* Jost-Thin.ttf */ = {isa = PBXFileReference; name = "Jost-Thin.ttf"; path = "../assets/fonts/Jost-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BBB60433433C4B20BE43F1FD /* Jost-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Jost-ThinItalic.ttf"; path = "../assets/fonts/Jost-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,8 +57,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				E9017E36666447B695A86BCE /* noop-file.swift */,
-				6077E77077C240258606B1D8 /* MaxCard-Bridging-Header.h */,
+				61EB214192F947319A78AACA /* noop-file.swift */,
+				390C15FE33BA4BC7996111CD /* MaxCard-Bridging-Header.h */,
 			);
 			name = MaxCard;
 			sourceTree = "<group>";
@@ -124,7 +88,6 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
-				432E825885FB496DB0A82BFF /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -173,32 +136,6 @@
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
-		432E825885FB496DB0A82BFF /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				769254DF4B7141ECA19A06DD /* Jost-Black.ttf */,
-				E81F1F167F1F4A30A377F014 /* Jost-BlackItalic.ttf */,
-				E63EDD3F49814242B094F234 /* Jost-Bold.ttf */,
-				DC3599D23DE74789886D314C /* Jost-BoldItalic.ttf */,
-				1B7D46420CF940DEA91CAF50 /* Jost-ExtraBold.ttf */,
-				C227C9A82C7F467A9B78441C /* Jost-ExtraBoldItalic.ttf */,
-				3D82CE89AD204AE79CD0FDA8 /* Jost-ExtraLight.ttf */,
-				B2F7F471AC01457E9878D939 /* Jost-ExtraLightItalic.ttf */,
-				8ED84015DD9440A09A6716AE /* Jost-Italic.ttf */,
-				23757C2EEAF447DF8DA8B633 /* Jost-Light.ttf */,
-				AA91FC0F6A9E4A8282E5096A /* Jost-LightItalic.ttf */,
-				135E3B0EA2D044AFB97B3E0F /* Jost-Medium.ttf */,
-				2959BBC04CD14F8D8EF924C1 /* Jost-MediumItalic.ttf */,
-				4B9C68150F4F47CCAF99257A /* Jost-Regular.ttf */,
-				44A5A82A6BF345FA996901AC /* Jost-SemiBold.ttf */,
-				F16041008ABD4E50B68F7CC5 /* Jost-SemiBoldItalic.ttf */,
-				A268BDA170F341EE966B0AC9 /* Jost-Thin.ttf */,
-				BBB60433433C4B20BE43F1FD /* Jost-ThinItalic.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -207,13 +144,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MaxCard" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				E7B1B4B3B42EF4BE298C2733 /* [Expo] Configure project */,
+				F3F0C61B7C5D8601A098A840 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				24B7562F6BEF9044E7008502 /* [CP] Embed Pods Frameworks */,
+				5668267F6FA31A726BA11172 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -263,24 +200,6 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				B2389E62F21B4CD9830C7C10 /* Jost-Black.ttf in Resources */,
-				58A13C740DA24B688779BCDF /* Jost-BlackItalic.ttf in Resources */,
-				F55C9026460842FB82438BB6 /* Jost-Bold.ttf in Resources */,
-				5990413B644142FDBBBA9244 /* Jost-BoldItalic.ttf in Resources */,
-				22486567BDFF42A785E6314E /* Jost-ExtraBold.ttf in Resources */,
-				9D9A6B9D82084EF29C046AC7 /* Jost-ExtraBoldItalic.ttf in Resources */,
-				4849F8A1A01A453692C55691 /* Jost-ExtraLight.ttf in Resources */,
-				5D3B7BD9BC2E4C5FA3685D54 /* Jost-ExtraLightItalic.ttf in Resources */,
-				191EE248224D465E8B3F6F1B /* Jost-Italic.ttf in Resources */,
-				440E990877ED4320A76EE985 /* Jost-Light.ttf in Resources */,
-				1905BE6D631545DA8C52BCC7 /* Jost-LightItalic.ttf in Resources */,
-				2ECA473B45694F53932541A1 /* Jost-Medium.ttf in Resources */,
-				76DBA8EF0A364225A5F34F18 /* Jost-MediumItalic.ttf in Resources */,
-				99FB63545B55477EBA9A4B2D /* Jost-Regular.ttf in Resources */,
-				B30A575B819545469CC07BD8 /* Jost-SemiBold.ttf in Resources */,
-				AEAF6516492B487192C0E20E /* Jost-SemiBoldItalic.ttf in Resources */,
-				B725D9DD29E742E3B008400B /* Jost-Thin.ttf in Resources */,
-				D4B2A96219F94B4FB839680F /* Jost-ThinItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,7 +243,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		24B7562F6BEF9044E7008502 /* [CP] Embed Pods Frameworks */ = {
+		5668267F6FA31A726BA11172 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -349,12 +268,18 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MaxCard/Pods-MaxCard-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuthCore_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher_Core_Privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppAuthCore_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMSessionFetcher_Core_Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,7 +287,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MaxCard/Pods-MaxCard-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E7B1B4B3B42EF4BE298C2733 /* [Expo] Configure project */ = {
+		F3F0C61B7C5D8601A098A840 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -391,7 +316,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				CAA364954B8C4B2382A2FCAF /* noop-file.swift in Sources */,
+				FD92B36212074A1D8CC6FD7E /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
