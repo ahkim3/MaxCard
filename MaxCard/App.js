@@ -6,6 +6,7 @@ import { LoadingScreen } from "./views/LoadingScreen";
 import Wallet from './views/Wallet';
 import { SignInSplash } from './views/SignInSplash';
 import { Settings } from './views/Settings';
+import AddCard from './views/AddCard';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,10 @@ export default function App() {
       <Stack.Screen
         name="Wallet"
         component={Wallet}
+      />
+      <Stack.Screen 
+        name="AddCard"
+        component={AddCard}
       />
       <Stack.Screen
         name = "Settings"
