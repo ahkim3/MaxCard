@@ -25,14 +25,13 @@ export function GetLocationData() {
         let latitude = location.coords.latitude; //38.95082173840749;
         let longitude = location.coords.longitude; //-92.32771776690679;
         let url = "http://44.220.169.6:5000/get_location_cards?user_id=" + user.user.id +"&latitude=" + latitude + "&longitude=" + longitude;
-        console.log(url);
         try {
             const response = await fetch(url, {
               headers: {
                 'Accept': 'application/json'
               }
             });
-            const json = await response.text();
+            const json = await response.json();
             SetLocationData(json);
         } catch (error) {
             console.error(error);

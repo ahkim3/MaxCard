@@ -7,14 +7,19 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import  NavBar  from "./Navbar";
+// import  NavBar  from "./Navbar";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {
+  useFonts,
+  Jost_500Medium,
+  Jost_700Bold
+} from '@expo-google-fonts/jost';
+import { BackgroundLogo, NavBar } from "./Home";
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-
-const Wallet = ({ route }) => {
+const Wallet = ({ route, navigation }) => {
     const [cards, setCards] = useState([]);
     useEffect(() => {
       const fetchData = async () => {
@@ -27,31 +32,31 @@ const Wallet = ({ route }) => {
       };
       fetchData();
     }, []);
+    let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
+    if(!fontsLoaded) {
+      return;
+    } else {
+      return (
+        <View style={styles.container}>
+          <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
+            <BackgroundLogo/>
+            <Text style={styles.title}>Wallet</Text>
+          </LinearGradient>
 
-    return (
-      <View style={styles.container}>
-        <LinearGradient colors={["#2C506F", "black"]} style={styles.background}>
-          <Image
-            source={require("./../assets/logo_alternate.png")}
-            resizeMode="contain"
-            style={styles.logo}
-          />
-          <Text style={styles.text}>Wallet</Text>
-        </LinearGradient>
-
-        <View style={styles.cardContainer}>
-          {cards.map((card, i) => (
-            <Image
-              key={i}
-              source={ {uri: card.image_url}}
-              resizeMode="contain"
-              style={[styles.card, { zIndex: 5 + i }, { top: -150 * i }]}
-            />
-          ))}
+          <View style={styles.cardContainer}>
+            {cards.map((card, i) => (
+              <Image
+                key={i}
+                source={ {uri: card.image_url}}
+                resizeMode="contain"
+                style={[styles.card, { zIndex: 5 + i }, { top: -150 * i }]}
+              />
+            ))}
+          </View>
+          <NavBar style={[styles.nav, { zIndex: 10 }]} navigation={navigation} />
         </View>
-        <NavBar style={[styles.nav, { zIndex: 10 }]} />
-      </View>
     );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -61,24 +66,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   background: {
+    flex: 1,
     height: screenHeight,
     width: screenWidth,
-    zIndex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    rowGap: 25,
+    zIndex: 0
   },
-  text: {
-    position: "relative",
-    top: (20 / 100) * screenHeight,
-    left: (5 / 100) * screenWidth,
-    fontSize: 36,
+  title: {
+    fontFamily: 'Jost_700Bold',
+    fontSize: 35,
     letterSpacing: 4,
-    zIndex: 2,
-    color: "white",
-    fontWeight: 'bold'
-  },
+    color: 'white',
+    padding: 15,
+    position: "absolute",
+    left: screenWidth * 0.3,
+    top: screenHeight * 0.19,
+    },
   card: {
     width: (75 / 100) * screenWidth,
     height: (25 / 100) * screenHeight,
-},
+  },
   cardContainer: {
     flex: 1,
     position: "absolute",
@@ -110,23 +119,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: screenWidth,
     justifyContent: "space-evenly"
-  },
-  navItems: {
-    marginHorizontal: 10,
-  },
-  navWallet: {
-    height: 0.2 * screenHeight,
-    width: 0.2 * screenWidth,
-  },
-  navSettings: {
-    marginTop: 0.02 * screenHeight,
-    height: 0.15 * screenHeight,
-    width: 0.15 * screenWidth,
-  },
-  navBack: {
-    fontSize: 90,
-    color: "gray",
-    marginTop: 0.03 * screenHeight,
   },
   logo: {
     position: "absolute",
