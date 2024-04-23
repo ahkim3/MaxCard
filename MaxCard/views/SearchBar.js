@@ -54,7 +54,6 @@ const SearchBar = ({ onSelectCard }) => {
         style={styles.textInput}
         value={query}
         onChangeText={handleSearch}
-        placeholder="Search for a card"
       />
       <FlatList
         data={filteredData}

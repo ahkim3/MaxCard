@@ -4,18 +4,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { NavBar, Button } from "./Home";
 import SearchBar from "./SearchBar";
 import { BackgroundLogo } from "./Home";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
 const AddCard = ({navigation}) => {
-    const user_id = 116694757690850255924;
-    // const [cards, setCards] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const handleSubmit = async () => {
     if (selectedCard) {
-        console.log(selectedCard);
+        let user = await GoogleSignin.getCurrentUser();
         const response = await fetch(
           `http://44.220.169.6:5000/add_card_to_user`,
           {
@@ -24,9 +23,9 @@ const AddCard = ({navigation}) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              user_id: user_id,
-              card_id: selectedCard.card_id,
-            }),
+              user_id: user.user.id,
+              card_id: Number(selectedCard.card_id)
+            })
           }
         );
         const json = await response.json();
