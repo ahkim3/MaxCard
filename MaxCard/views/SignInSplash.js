@@ -43,10 +43,21 @@ export function SignInSplash({navigation}) {
                     default:
                         console.log("unknown error occurred during sign in");
                         console.log("SIGNINERR: " + error);
+
+                        // Display error message
+                        alert(
+                            "Error signing in. Please try again.\n\nError Message: " +
+                                error
+                        );
                 }
             }
         }
         const userSend = await getCurrentUserInfo();
+
+        if (userSend == null) {
+            console.log("userSend is null");
+            return;
+        }
         navigation.navigate("Loading", {userId: userSend.user.id});
     };
 
