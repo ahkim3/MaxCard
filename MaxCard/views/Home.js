@@ -231,27 +231,26 @@ const styles = StyleSheet.create({
   nav: {
     position: "absolute",
     right: -0.5 * screenWidth,
-    top: -0.2 * screenHeight,
+    top: -0.15 * screenHeight,
     flexDirection: "row",
     width: screenWidth,
     justifyContent: "space-evenly",
+    alignItems: "center",
   },
   navItems: {
     marginHorizontal: 10,
   },
   navWallet: {
-    height: 0.2 * screenHeight,
+    height: 0.1 * screenHeight,
     width: 0.2 * screenWidth,
   },
   navSettings: {
-    marginTop: 0.02 * screenHeight,
-    height: 0.15 * screenHeight,
+    height: 0.1 * screenHeight,
     width: 0.15 * screenWidth,
   },
   navBack: {
     fontSize: 90,
     color: "gray",
-    marginTop: 0.03 * screenHeight,
   },
   logo: {
     position: 'absolute',
