@@ -15,6 +15,10 @@ import json
 
 REGION_NAME = 'us-east-1'
 
+def translate_category(category):
+    if category == 'restaurant':
+        return ['food', 'cafe', 'restaurant']
+    return category
 
 def get_google_api_key():
 
@@ -386,11 +390,12 @@ def get_best_cards(user_id, latitude, longitude):
                         best_card = card
             # check for category rate -- check each category of the vendor labeled by google maps
             for category in location['types']:
-                for card_category in card_categories:
-                    if (category == card_category):
-                        if(card_categories[category] > best_rate):
-                            best_rate = card_categories[category]
-                            best_card = card
+                for card_category_broad in card_categories:
+                    for card_category in translate_category(card_category_broad):
+                        if (category == card_category):
+                            if(card_categories[card_category_broad] > best_rate):
+                                best_rate = card_categories[card_category_broad]
+                                best_card = card
             # check for base rate
             if (card_base > best_rate):
                 best_rate = card_base
