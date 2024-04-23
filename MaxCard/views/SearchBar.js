@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions, View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const SearchBar = ({ onSelectCard }) => {
   const [query, setQuery] = useState("");
@@ -46,6 +49,7 @@ const SearchBar = ({ onSelectCard }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.searchText}>Search for a card:</Text>
       <TextInput
         style={styles.textInput}
         value={query}
@@ -64,13 +68,21 @@ const SearchBar = ({ onSelectCard }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    padding: 50,
     paddingHorizontal: 10,
+    width: 0.8 * screenWidth,
+    height: 0.4 * screenHeight
+  },
+  searchText: {
+    color: "white",
+    fontFamily: "Jost_500Medium",
+    fontSize: 20,
+    paddingHorizontal: 10
   },
   textInput: {
     height: 40,
-    borderWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 2,
+    borderColor: 'white',
     paddingLeft: 10,
     margin: 10,
     borderRadius: 5,
