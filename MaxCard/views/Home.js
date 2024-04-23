@@ -17,7 +17,6 @@ import {
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-
 export const NavBar = ({navigation}) => {
   return (
     <View style={styles.navContainer}>
@@ -29,6 +28,37 @@ export const NavBar = ({navigation}) => {
           >
             <Text style={styles.navBack}>{"<"}</Text>
           </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navItems}
+          onPress={() => navigation.navigate("Wallet")}
+        >
+          <Image
+            source={require("./../assets/wallet.png")}
+            resizeMode="contain"
+            style={styles.navWallet}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navItems}
+          onPress={() => navigation.navigate("Settings")}
+        >
+          <Image
+            source={require("./../assets/settings.png")}
+            resizeMode="contain"
+            style={styles.navSettings}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+export const HomeNavBar = ({navigation}) => {
+  return (
+    <View style={styles.navContainer}>
+        <View style={styles.nav}>
 
         <TouchableOpacity
           style={styles.navItems}
@@ -84,7 +114,28 @@ export const Home = ({route, navigation}) => {
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;
-  } else {
+  } else if (curLocation == null) {
+    return (
+      <LinearGradient
+        colors={['#2C506F', 'black']}
+        style={styles.background}>
+        <BackgroundLogo/>
+        <Text style={styles.title}>Best Card For: </Text>
+        <Text style={styles.subtext}>{"No cards in account"}</Text>
+        <View style={styles.cardContainer}>
+          <Image
+            source={require("../assets/card.png")}
+            style={styles.card}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={{position: 'absolute', top: screenHeight}}>
+          <HomeNavBar navigation={navigation}/>
+        </View>
+      </LinearGradient>
+    );
+  }
+  else {
     return (
       <LinearGradient
         colors={['#2C506F', 'black']}
@@ -100,9 +151,9 @@ export const Home = ({route, navigation}) => {
           />
         </View>
         <Button title={"I'M NOT HERE"} onpress={() =>
-          navigation.navigate('AlternateLocations', {locations: locations, curLocation: curLocation})}/>
+          navigation.navigate('AlternateLocations', {locations: locations, curLocation: curLocation[0]})}/>
         <View style={{position: 'absolute', top: screenHeight}}>
-          <NavBar navigation={navigation}/>
+          <HomeNavBar navigation={navigation}/>
         </View>
       </LinearGradient>
     );
@@ -180,27 +231,26 @@ const styles = StyleSheet.create({
   nav: {
     position: "absolute",
     right: -0.5 * screenWidth,
-    top: -0.2 * screenHeight,
+    top: -0.15 * screenHeight,
     flexDirection: "row",
     width: screenWidth,
     justifyContent: "space-evenly",
+    alignItems: "center",
   },
   navItems: {
     marginHorizontal: 10,
   },
   navWallet: {
-    height: 0.2 * screenHeight,
+    height: 0.1 * screenHeight,
     width: 0.2 * screenWidth,
   },
   navSettings: {
-    marginTop: 0.02 * screenHeight,
-    height: 0.15 * screenHeight,
+    height: 0.1 * screenHeight,
     width: 0.15 * screenWidth,
   },
   navBack: {
     fontSize: 90,
     color: "gray",
-    marginTop: 0.03 * screenHeight,
   },
   logo: {
     position: 'absolute',

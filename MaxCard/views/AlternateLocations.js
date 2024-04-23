@@ -49,7 +49,7 @@ export function AlternateLocations({navigation, route}) {
     return;
   } else {
     const buttons = alternateLocations.map((item, i) => 
-      <Button key={i} title={item.name} onpress={() =>
+      <Button key={i} title={item[0]} onpress={() =>
         navigation.navigate('Home', {locations: locations, curLocation: item})
       }/>
     );
