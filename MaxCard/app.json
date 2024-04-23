@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.MaxCard"
+      "bundleIdentifier": "com.anonymous.MaxCard",
+      "googleServicesFile": "./ios/MaxCard/Info.plist"
     },
     "android": {
       "adaptiveIcon": {
