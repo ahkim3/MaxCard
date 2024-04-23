@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { NavBar } from "./Home";
+import { NavBar, Button } from "./Home";
 import SearchBar from "./SearchBar";
 import { BackgroundLogo } from "./Home";
 
@@ -37,16 +37,15 @@ const AddCard = ({navigation}) => {
   };
 
   return (
-    <LinearGradient colors={["#2C506F", "black"]} style={styles.container}>
+    <LinearGradient
+          colors={['#2C506F', 'black']}
+          style={styles.background}>
       <BackgroundLogo />
-      <View>
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Add Card</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Add Card</Text>
       <View>
         <SearchBar onSelectCard={setSelectedCard} />
       </View>
+      <Button title={"Add Card\nto Wallet"} onpress={handleSubmit}/>
       <View style={{ position: "absolute", top: screenHeight + 15, right: 200 }}>
         <NavBar navigation={navigation} />
       </View>
@@ -55,73 +54,19 @@ const AddCard = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
   background: {
+    flex: 1,
     height: screenHeight,
     width: screenWidth,
-    zIndex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  logoContainer: {
-    flex: 1,
-    flexDirection: "row", // Set children to be in a row
-    justifyContent: "flex-end", // Align children to the right
-    alignItems: "flex-start", // Align children to the top
-    width: "100%", // Ensure the container takes the full width
-    zIndex: 0
-  },
-  logo: {
-    width: 0.5 * screenWidth, // Set the width of the logo
-    height: 0.5 * screenHeight, // Set the height of the logo
-    backgroundColor: "red",
-  },
-  text: {
-    position: "relative",
-    top: (10 / 100) * screenHeight,
-    left: (5 / 100) * screenWidth,
-    fontSize: 36,
+  title: {
+    fontFamily: 'Jost_700Bold',
+    fontSize: 35,
     letterSpacing: 4,
-    zIndex: 2,
-    color: "white",
-    fontWeight: "bold",
-    marginBottom: (15 / 100) * screenHeight,
-  },
-  inputText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  inputContainerContainer: {
-    justifyContent: "center",
-    zIndex: 1
-  },
-  inputContainer: {
-    zIndex: 10,
-    marginBottom: 15,
-    alignItems: "center",
-  },
-  input: {
-    backgroundColor: "white",
-    height: 40,
-    width: (80 / 100) * screenWidth,
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 10,
-    borderColor: "grey",
-  },
-  button: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    fontWeight: "bold",
-    color: "#51999E",
-    fontSize: 24,
-    justifyContent: "center",
-    zIndex: 25,
+    color: 'white',
+    padding: 15
   },
 });
 
