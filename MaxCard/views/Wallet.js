@@ -5,7 +5,7 @@ import {
   Image,
   Text
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 // import  NavBar  from "./Navbar";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -15,23 +15,27 @@ import {
   Jost_700Bold
 } from '@expo-google-fonts/jost';
 import { BackgroundLogo, NavBar } from "./Home";
+import { useFocusEffect } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
 const Wallet = ({ route, navigation }) => {
     const [cards, setCards] = useState([]);
-    useEffect(() => {
-      const fetchData = async () => {
-        let user = await GoogleSignin.getCurrentUser();
-        fetch("http://44.220.169.6:5000//view_account_cards?user_id="+ user.user.id)
-        .then(results => results.json())
-        .then(data => {
-         setCards(data);
-       });
-      };
-      fetchData();
-    }, []);
+    const fetchData = async () => {
+      let user = await GoogleSignin.getCurrentUser();
+      fetch("http://44.220.169.6:5000//view_account_cards?user_id="+ user.user.id)
+      .then(results => results.json())
+      .then(data => {
+       setCards(data);
+     });
+    };
+    useFocusEffect(
+      useCallback(() => {
+        fetchData();
+      }, [])
+    );
+
     let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
     if(!fontsLoaded) {
       return;

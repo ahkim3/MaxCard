@@ -86,9 +86,8 @@ const RemoveCard = ({ navigation }) => {
             />
           ))}
         </Picker>
-        <Button title={"Remove Card\nfrom Wallet"} onpress={handleSubmit}/>
       </View>
-      {/* <Button title={"Remove Card\nfrom Wallet"} onpress={handleSubmit} /> */}
+      <Button title={"Remove Card\nfrom Wallet"} onpress={handleSubmit}/>
       <View
         style={{ position: "absolute", top: screenHeight + 15, right: 200 }}
       >
@@ -114,12 +113,13 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   pickerContainer: {
-    width: 0.8 * screenWidth
+    width: 0.8 * screenWidth,
+    paddingVertical: 60
   },
   pickerItem: {
     color: "white",
     borderColor: "white",
-    borderWidth: 1
+    borderWidth: 2
   }
 });
 
