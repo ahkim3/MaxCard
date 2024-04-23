@@ -16,6 +16,7 @@ import {
 } from '@expo-google-fonts/jost';
 import { GetLocationData } from '../RetrieveData';
 import { LoadingScreen } from './LoadingScreen';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -43,6 +44,11 @@ export function AlternateLocations({navigation, route}) {
   useEffect(() => {
     handleFilter();
   }, []);
+
+  retryBtn = async () => {
+    let user = await GoogleSignin.getCurrentUser();
+    navigation.navigate("Loading", {userId: user.user.id})
+  };
   
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
@@ -53,40 +59,25 @@ export function AlternateLocations({navigation, route}) {
         navigation.navigate('Home', {locations: locations, curLocation: item})
       }/>
     );
-
-    console.log("showLoadgin: " + showLoading + "\nisLoading: " + isLoading);
-
-    if(showLoading && isLoading) {
-      return <LoadingScreen/>;
-    }
-    else if(showLoading && !isLoading) {
-      navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]});
-      return;
-    }
-    else {
-      return (
-        <LinearGradient
-          colors={['#2C506F', 'black']}
-          style={styles.background}>
-          <BackgroundLogo/>
-          <Text style={styles.title}>Alternate Locations:</Text>
-          {buttons}
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => 
-            {isLoading ? (
-              setShowLoading(true)
-            ) : navigation.navigate('Home', {locations: retryLocationData, curLocation: retryLocationData[0]})}}>
-            <LinearGradient
-              colors={['#51999E', '#7BE495']}
-              style={styles.button}>
-                <Text style={styles.text}>Retry</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <View style={{position: 'absolute', top: screenHeight}}>
-            <NavBar navigation={navigation}/>
-          </View>
-        </LinearGradient>
-      );
-    }
+    return (
+      <LinearGradient
+        colors={['#2C506F', 'black']}
+        style={styles.background}>
+        <BackgroundLogo/>
+        <Text style={styles.title}>Alternate Locations:</Text>
+        {buttons}
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => {retryBtn();}}>
+          <LinearGradient
+            colors={['#51999E', '#7BE495']}
+            style={styles.button}>
+              <Text style={styles.text}>Retry</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <View style={{position: 'absolute', top: screenHeight}}>
+          <NavBar navigation={navigation}/>
+        </View>
+      </LinearGradient>
+    );
   }
 }
 
