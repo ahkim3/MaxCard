@@ -387,7 +387,7 @@ def get_best_cards(user_id, latitude, longitude):
             # check for category rate -- check each category of the vendor labeled by google maps
             for category in location['types']:
                 for card_category in card_categories:
-                    if (category in card_category):
+                    if (category == card_category):
                         if(card_categories[category] > best_rate):
                             best_rate = card_categories[category]
                             best_card = card
