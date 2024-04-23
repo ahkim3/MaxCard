@@ -114,7 +114,28 @@ export const Home = ({route, navigation}) => {
   let [fontsLoaded] = useFonts({Jost_500Medium, Jost_700Bold});
   if(!fontsLoaded) {
     return;
-  } else {
+  } else if (curLocation == null) {
+    return (
+      <LinearGradient
+        colors={['#2C506F', 'black']}
+        style={styles.background}>
+        <BackgroundLogo/>
+        <Text style={styles.title}>Best Card For: </Text>
+        <Text style={styles.subtext}>{"No cards in account"}</Text>
+        <View style={styles.cardContainer}>
+          <Image
+            source={require("../assets/card.png")}
+            style={styles.card}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={{position: 'absolute', top: screenHeight}}>
+          <HomeNavBar navigation={navigation}/>
+        </View>
+      </LinearGradient>
+    );
+  }
+  else {
     return (
       <LinearGradient
         colors={['#2C506F', 'black']}
@@ -130,7 +151,7 @@ export const Home = ({route, navigation}) => {
           />
         </View>
         <Button title={"I'M NOT HERE"} onpress={() =>
-          navigation.navigate('AlternateLocations', {locations: locations, curLocation: curLocation})}/>
+          navigation.navigate('AlternateLocations', {locations: locations, curLocation: curLocation[0]})}/>
         <View style={{position: 'absolute', top: screenHeight}}>
           <HomeNavBar navigation={navigation}/>
         </View>
