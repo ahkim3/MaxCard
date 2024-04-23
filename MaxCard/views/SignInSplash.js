@@ -15,6 +15,9 @@ const screenWidth = Dimensions.get("window").width;
 GoogleSignin.configure({
     iosClientId:
         "577433087557-usas1p65rl0udj6jlu9caesbu21re139.apps.googleusercontent.com",
+    webClientId:
+        "577433087557-ptok2765u02p66cd1lpcc3hi6kreac6n.apps.googleusercontent.com",
+    forceCodeForRefreshToken: true,
 });
 
 export function SignInSplash({navigation}) {
