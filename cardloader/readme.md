@@ -19,8 +19,12 @@ configure the cli
 ```console
 aws configure
 ```
-
 Using the credentials from the discord
+
+AWS Access Key ID: *See Discord*
+AWS Secret Access Key: *See Discord*
+Default region name: us-east-1:
+Default output format: None
 
 run the program
 
