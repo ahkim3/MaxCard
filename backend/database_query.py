@@ -253,7 +253,7 @@ def nearest_locations(latitude, longitude):
     location = (latitude, longitude)
     max_results = 1
     how_to_rank = 'prominence'
-    search_radius = 15
+    search_radius = 40
     valid_types = ['food', 'restaurant', 'drugstore', 'pharmacy', 'bar', 'lodging', 'gas_station', 'grocery_or_supermarket', 'supermarket', 'shopping_mall', 'clothing_store', 'department_store', 'electronics_store', 'home_goods_store', 'jewelry_store', 'shoe_store', 'shopping_mall', 'store', 'book_store', 'convenience_store', 'liquor_store', 'meal_delivery', 'meal_takeaway', 'bakery', 'cafe']
 
     # Find the most prominent location
