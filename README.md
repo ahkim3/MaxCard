@@ -8,7 +8,7 @@ This project was designed and developed as a capstone project for the University
 
 ## Video Demo
 
-<img src="./assets/Video_Demo_Thumbnail.png" alt="Click to play on YouTube" width="75%">
+<a href="https://www.youtube.com/watch?v=xsYrL3mWZew"><img src="./assets/Video_Demo_Thumbnail.png" alt="Click to play on YouTube" width="75%">
 
 ## Usage
 
