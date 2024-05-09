@@ -8,7 +8,7 @@ This project was designed and developed as a capstone project for the University
 
 ## Video Demo
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xsYrL3mWZew?si=jzR0S9BTdUps0mI0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<img src="./assets/Video_Demo_Thumbnail.png" alt="Click to play on YouTube" width="75%">
 
 ## Usage
 
