@@ -6,6 +6,10 @@ A cross-platform mobile app that helps you maximize your cash back on-the-go.
 
 This project was designed and developed as a capstone project for the University of Missouri's Computer Science program.
 
+## Video Demo
+
+<a href="https://www.youtube.com/watch?v=xsYrL3mWZew"><img src="./assets/Video_Demo_Thumbnail.png" alt="Click to play on YouTube" width="75%">
+
 ## Usage
 
 -   Sign in with Google account
